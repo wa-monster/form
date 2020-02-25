@@ -1,0 +1,23 @@
+
+
+
+/*标点*/
+.is-focus .el-select__caret.el-input__icon.el-icon-arrow-up.is-reverse{
+  transform: rotate(180deg);
+}
+.el-zoom-in-top-leave-active,.el-zoom-in-top-enter{
+  -ms-transform: scaleY(0);
+}
+.el-zoom-in-top-enter-active,.el-zoom-in-top-enter{
+  -ms-transform: scaleY(1);
+}
+.el-message{
+  transform: translateX(-50%);
+  transition: opacity .3s,top .4s,-webkit-transform .4s;
+  -ms-transform: translateX(-50%);
+  -ms-transition: opacity .3s,top .4s,-webkit-transform .4s;
+}
+.el-submenu.is-opened>.el-submenu__title .el-submenu__icon-arrow{
+  transform: rotate(180deg);
+}
+

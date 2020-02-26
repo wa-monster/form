@@ -72,7 +72,7 @@
           prop="params"
           label="参数描述"
           align="center"
-          min-width="550"
+          min-width="500"
           :show-overflow-tooltip="true"
           :formatter="formatter"
         ></el-table-column>

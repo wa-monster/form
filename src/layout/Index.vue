@@ -57,6 +57,7 @@ export default{
 .box{
   box-sizing:border-box;
   width:calc(100% - 200px);
+  min-width :1000px;
   float:left;
   padding: 10px;
 }

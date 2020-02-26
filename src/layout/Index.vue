@@ -4,23 +4,13 @@
     <el-row class="main">
       <Sidebar v-if="openTop && openMenu">
       </Sidebar>
-      <!-- <div
-        v-if="openTop && openMenu"
-        class="menu_box"
+      <div
+        class="box"
+        :style="(!openMenu||!openTop)? {width: '100%'}:{width:'calc(100% - 200px)'}"
       >
-        <el-menu
-          active-text-color="#333"
-          @select="menuSelect"
-        >
-          <MenuItem
-            v-for="(item, index) in menuList"
-            :key="index"
-            :item="item"
-          ></MenuItem>  
-        </el-menu>
-      </div> -->
-      <div class="box">
-        <router-view />
+        <div class="box_main">
+          <router-view />
+        </div>
       </div>
     </el-row>
   </div>
@@ -56,9 +46,17 @@ export default{
 }
 .box{
   box-sizing:border-box;
-  width:calc(100% - 200px);
-  min-width :1000px;
+  min-width :800px;
+  height:100%;
   float:left;
   padding: 10px;
+  .box_main{
+    box-sizing:border-box;
+    width:100%;
+    height:100%;
+    padding:10px;
+    box-shadow:0px 0px 3px #ccc;
+    // background-color:#f5f5f5;
+  }
 }
 </style>

@@ -3,7 +3,8 @@ import { MessageBox, Message } from 'element-ui'
 axios.defaults.timeout = 30000
 
 const server = axios.create({
-  baseURL:'http://localhost:3000'
+  // baseURL:'http://localhost:3000'
+  baseURL:'http://localhost:8000'
 })
 
 server.interceptors.request.use(
@@ -55,7 +56,7 @@ server.interceptors.response.use(
 )
 
 let Axios = (option) => {
-  return service({...option}).catch(err => {
+  return server({...option}).catch(err => {
     throw err
   })
 }

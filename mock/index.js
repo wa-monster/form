@@ -1,7 +1,11 @@
+let  {datalist}  =  require('./data')
+
 module.exports = function(app){
-  app.get('/aa',(req,res,next)=>{
+  //数据源列表
+  app.get('/datalist',(req,res,next)=>{
     return res.json({
-      a:''
+      datalist,
+      code:0
     })
   })
 }

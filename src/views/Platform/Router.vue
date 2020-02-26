@@ -114,7 +114,7 @@
 import addDialog from "@/views/dialog/routerDialog.vue";
 import editDialog from "@/views/dialog/routerDialog.vue";
 export default {
-  name: "",
+  name: "Router",
   components: {
     addDialog,
     editDialog

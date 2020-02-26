@@ -4,6 +4,7 @@
       <el-button
         size="medium"
         type="primary"
+        @click="showDialog"
       >
         添加
       </el-button>
@@ -11,16 +12,7 @@
         size="medium"
         type="danger"
       >
-        删除
-      </el-button>
-      <el-button
-        size="medium"
-        type="info"
-      >
-        修改
-      </el-button>
-      <el-button size="medium">
-        生效
+        删除选中
       </el-button>
     </div>
     <el-table
@@ -74,44 +66,89 @@
           {{ scope.row.type }}
         </template>
       </el-table-column>
+      <el-table-column
+        label="类型"
+        width="220"
+      >
+        <template>
+          <el-button
+            size="mini"
+            type="danger"
+          >
+            删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="info"
+          >
+            修改
+          </el-button>
+          <el-button size="mini">
+            生效
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="page">
       <el-pagination
         background
-        layout="->, prev, pager, next"
-        :total="100"
+        :page-count="page.currentPage"
+        :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="page.total"
+        @current-change="currentChange"
+        @size-change="sizeChange"
       >
       </el-pagination>
     </div>
+    <DataDialog ref="dataDialog">  
+    </DataDialog>
   </div>
 </template>
 
 <script>
+import mixin from '@/views/mixin'
+import DataDialog from '@/components/dialog/dataDialog'
+
 import { getDataList } from '@/api/base/data'
 export default {
   name:'Data',
+  components:{
+    DataDialog
+  },
+  mixins:[mixin],
   data(){
     return {
       tableData:[]
     }
   },
   mounted(){
-    this.getList()
+    this.load()
   },
   methods:{
-  async getList(){
+    async load(){
       try{
-        let res = await getDataList()
-        this.tableData = res.datalist
+        let params = {
+          currentPage:this.page.currentPage,
+          pageSize:this.page.pageSize,
+        }
+        let res = await getDataList(params)
+        this.tableData = res.list
+        this.page.total = res.total
+
       }catch(err){
         throw err
       }
+    },
+    showDialog(){
+      this.$refs.dataDialog.show();
     }
-  }
+  },
+    
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .data_box{
   width:100%;
   height:100%;
@@ -120,9 +157,5 @@ export default {
     margin-bottom:20px;
   }
 }
-.page{
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
+
 </style>

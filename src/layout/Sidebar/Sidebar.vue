@@ -4,6 +4,8 @@
   >
     <el-input
       v-model="serachVal"
+      class="search_input"
+      placeholder="输入文字并搜索"
       @keypress.enter.native="searchMenu"
     >
       <i
@@ -87,9 +89,10 @@ export default {
   width:200px;
   float:left;
   height:100%;
-}
-.el-menu{
-  height:100%;
   background-color:#f2f2f2;
+}
+.search_input{
+  margin 10px;
+  width: 180px;
 }
 </style>

@@ -19,7 +19,9 @@
           ></MenuItem>  
         </el-menu>
       </div> -->
-      <router-view />
+      <div class="box">
+        <router-view />
+      </div>
     </el-row>
   </div>
 </template>
@@ -51,5 +53,11 @@ export default{
 
 .main{
   height:calc(100% - 41px)
+}
+.box{
+  box-sizing:border-box;
+  width:calc(100% - 200px);
+  float:left;
+  padding: 10px;
 }
 </style>

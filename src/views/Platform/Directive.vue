@@ -2,20 +2,44 @@
   <div class="instruction">
     <div class="myform-header">
       <div class="btn-group">
-        <el-button type="primary" size="medium" @click="addDialogVisible = true">添加</el-button>
-        <el-button type="danger" size="medium" @click="remove">删除</el-button>
-        <el-button type="info" size="medium" @click="edit">修改</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          @click="addDialogVisible = true"
+        >
+          添加
+        </el-button>
+        <el-button
+          type="danger"
+          size="medium"
+          @click="remove"
+        >
+          删除
+        </el-button>
+        <el-button
+          type="info"
+          size="medium"
+          @click="edit"
+        >
+          修改
+        </el-button>
         <el-input
-          class="searchInput"
           v-if="inputVisible"
-          v-model="inputValue"
           ref="searchInput"
+          v-model="inputValue"
+          class="searchInput"
           size="medium"
           placeholder="请输入指令名称"
           @keyup.enter.native="handleInputConfirm"
           @blur="clearVal"
         ></el-input>
-        <el-button v-else size="medium" @click="showInput">查询</el-button>
+        <el-button
+          v-else
+          size="medium"
+          @click="showInput"
+        >
+          查询
+        </el-button>
       </div>
       <hr />
     </div>
@@ -26,25 +50,47 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="name" label="指令名称" width="180" align="center"></el-table-column>
-        <el-table-column prop="code" label="代码" align="center"></el-table-column>
-        <el-table-column prop="params" label="参数描述" align="center" :formatter="formatter"></el-table-column>
-        <el-table-column prop="fn" label="功能" align="center"></el-table-column>
+        <el-table-column
+          type="selection"
+          width="55"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="name"
+          label="指令名称"
+          width="180"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="code"
+          label="代码"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="params"
+          label="参数描述"
+          align="center"
+          :formatter="formatter"
+        ></el-table-column>
+        <el-table-column
+          prop="fn"
+          label="功能"
+          align="center"
+        ></el-table-column>
       </el-table>
     </div>
     <div class="myform-footer"></div>
     <addDialog
-      @changeSate="closeDiglog"
       :visible="addDialogVisible"
-      :formData="instructionForm"
+      :form-data="instructionForm"
       type="add"
+      @changeSate="closeDiglog"
     ></addDialog>
     <editDialog
-      @changeSate="closeDiglog"
       :visible="editDialogVisible"
-      :formData="currentData[0]"
+      :form-data="currentData[0]"
       type="edit"
+      @changeSate="closeDiglog"
     ></editDialog>
     <!-- <el-dialog title v-if="dialogFormVisible" :visible.sync="dialogFormVisible" @close="resetForm">
       <el-form
@@ -118,10 +164,14 @@
   </div>
 </template>
 <script>
-import addDialog from "./dialog/instructionDiaglog.vue";
-import editDialog from "./dialog/instructionDiaglog.vue";
+import addDialog from "@/views/dialog/instructionDiaglog.vue";
+import editDialog from "@/views/dialog/instructionDiaglog.vue";
 export default {
   name:'Directive',
+  components: {
+    addDialog,
+    editDialog
+  },
   data() {
     return {
       inputValue: "",
@@ -269,10 +319,6 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     }
-  },
-  components: {
-    addDialog,
-    editDialog
   }
 };
 </script>

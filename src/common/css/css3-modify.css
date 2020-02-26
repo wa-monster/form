@@ -33,3 +33,10 @@
 .menu_box .el-menu-item:focus, .menu_box .el-menu-item:hover, .menu_box .el-submenu__title:hover{
   background-color: #e6e6e6;
 }
+
+/* 分页 */
+.page{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}

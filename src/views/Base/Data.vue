@@ -78,8 +78,12 @@
     <div class="page">
       <el-pagination
         background
-        layout="->, prev, pager, next"
-        :total="100"
+        :page-count="page.currentPage"
+        :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="page.total"
+        @current-change="currentChange"
+        @size-change="sizeChange"
       >
       </el-pagination>
     </div>
@@ -87,22 +91,30 @@
 </template>
 
 <script>
+import mixin from '@/views/mixin'
 import { getDataList } from '@/api/base/data'
 export default {
   name:'Data',
+  mixins:[mixin],
   data(){
     return {
       tableData:[]
     }
   },
   mounted(){
-    this.getList()
+    this.load()
   },
   methods:{
-  async getList(){
+  async load(){
       try{
-        let res = await getDataList()
-        this.tableData = res.datalist
+        let params = {
+          currentPage:this.page.currentPage,
+          pageSize:this.page.pageSize,
+        }
+        let res = await getDataList(params)
+        this.tableData = res.list
+        this.page.total = res.total
+
       }catch(err){
         throw err
       }
@@ -111,7 +123,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .data_box{
   width:100%;
   height:100%;
@@ -120,9 +132,5 @@ export default {
     margin-bottom:20px;
   }
 }
-.page{
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
+
 </style>

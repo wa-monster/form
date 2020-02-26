@@ -2,9 +2,49 @@
   <el-dialog
     title="提示"
     :visible.sync="dialogVisible"
-    width="30%"
+    :close-on-click-modal="false"
+    width="500"
   >
-    <span>这是一段信息</span>
+    <el-form label-width="90px">
+      <el-form-item label="名称：">
+        <el-input></el-input>
+      </el-form-item>
+      <el-form-item label="描述：">
+        <el-input></el-input>
+      </el-form-item>
+      <el-form-item label="简码：">
+        <el-input></el-input>
+      </el-form-item>
+      <el-form-item label="类型：">
+        <el-radio
+          v-model="radio"
+          label="1"
+        >
+          mysql
+        </el-radio>
+        <el-radio
+          v-model="radio"
+          label="2"
+        >
+          postgres
+        </el-radio>
+        <el-radio
+          v-model="radio"
+          label="3"
+        >
+          oracle
+        </el-radio>
+        <el-radio
+          v-model="radio"
+          label="4"
+        >
+          mongodb
+        </el-radio>
+      </el-form-item>
+      <el-form-item label="连接信息：">
+        <el-input></el-input>
+      </el-form-item>
+    </el-form>
     <span
       slot="footer"
       class="dialog-footer"
@@ -23,7 +63,8 @@ export default {
     name:'DataDialog',
     data() {
       return {
-        dialogVisible: false
+        dialogVisible: false,
+        radio:''
       };
     },
     methods: {

@@ -26,6 +26,7 @@
     <el-table
       ref="Table"
       border
+      height="540"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
@@ -36,26 +37,52 @@
       >
       </el-table-column>
       <el-table-column
-        label="日期"
-        width="120"
+        label="名称"
       >
         <template slot-scope="scope">
-          {{ scope.row.date }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="120"
+        label="描述"
       >
+        <template slot-scope="scope">
+          {{ scope.row.description }}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址"
-        show-overflow-tooltip
+        label="标志"
+        width="120"
       >
+        <template slot-scope="scope">
+          {{ scope.row.sign }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="信息"
+        width="120"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.info }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="类型"
+        width="120"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.type }}
+        </template>
       </el-table-column>
     </el-table>
+    <div class="page">
+      <el-pagination
+        background
+        layout="->, prev, pager, next"
+        :total="100"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -88,8 +115,14 @@ export default {
 .data_box{
   width:100%;
   height:100%;
+  position: relative;
   .data_btn{
-    margin-bottom:10px;
+    margin-bottom:20px;
   }
+}
+.page{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

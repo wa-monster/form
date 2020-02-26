@@ -67,6 +67,14 @@ const platform = {
       }
     },
     {
+      path: 'server',
+      name: 'Server',
+      component: ()=> import(/* webpackChunkName: "PlatformAuto" */ '../views/Platform/Server.vue'),
+      meta:{
+        name:'服务表',
+      }
+    },
+    {
       path: 'page',
       name: 'Page',
       component: ()=> import(/* webpackChunkName: "PlatformAuto" */ '../views/Platform/Page.vue'),

@@ -109,80 +109,11 @@
       type="edit"
       @changeSate="closeDiglog"
     ></editDialog>
-    <!-- <el-dialog title v-if="dialogFormVisible" :visible.sync="dialogFormVisible" @close="resetForm">
-      <el-form
-        :model="instructionForm"
-        label-position="left"
-        :label-width="formLabelWidth"
-        size="mini"
-        :rules="instructionFormRule"
-        class="sec-form"
-        ref="instructionForm"
-      >
-        <el-form-item label="指令名称" prop="name">
-          <el-input v-model="instructionForm.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="指令代码" prop="code">
-          <el-input v-model="instructionForm.code" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="功能描述" prop="fn">
-          <el-input v-model="instructionForm.fn" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-radio-group v-model="instructionForm.type">
-            <el-radio :label="0">mysql</el-radio>
-            <el-radio :label="1">postgres</el-radio>
-            <el-radio :label="2">oracle</el-radio>
-            <el-radio :label="3">mongodb</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="参数描述">
-          <br />
-          <el-form-item
-            v-for="(item,index) in instructionForm.params"
-            :key="index"
-            :label="`参数${index+1}`"
-            label-width="56px"
-          >
-            <br />
-            <el-form
-              :rules="childFormRule"
-              ref="childForm"
-              size="mini"
-              :model="instructionForm.params[index]"
-              label-width="65px"
-            >
-              <el-form-item label="label" prop="label">
-                <el-input v-model="item.label" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="变量名" prop="name">
-                <el-input v-model="item.name" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="类型" prop="type">
-                <el-radio-group v-model="item.type">
-                  <el-radio :label="0">数值</el-radio>
-                  <el-radio :label="1">字符</el-radio>
-                  <el-radio :label="2">数组</el-radio>
-                  <el-radio :label="3">日期</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="默认值" prop="default" style="margin-bottom:0px">
-                <el-input v-model="item.default" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-          </el-form-item>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" style="text-align: center;">
-        <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        <el-button @click="resetForm">取 消</el-button>
-      </div>
-    </el-dialog>-->
   </div>
 </template>
 <script>
-import addDialog from "@/views/dialog/instructionDiaglog.vue";
-import editDialog from "@/views/dialog/instructionDiaglog.vue";
+import addDialog from "@/views/dialog/instructionDialog.vue";
+import editDialog from "@/views/dialog/instructionDialog.vue";
 export default {
   name: "Directive",
   components: {
@@ -207,21 +138,6 @@ export default {
           { label: "姓名", name: "name", type: 0, default: "1" },
           { label: "姓名", name: "name", type: 0, default: "1" }
         ]
-      },
-      instructionFormRule: {
-        name: [
-          { required: true, message: "指令名称不能为空", trigger: "blur" }
-        ],
-        code: [
-          { required: true, message: "指令代码不能为空", trigger: "blur" }
-        ],
-        fn: [{ required: true, message: "功能描述不能为空", trigger: "blur" }],
-        type: [{ required: true, message: "类型不能为空", trigger: "change" }]
-      },
-      childFormRule: {
-        //   label:[
-        //       { required: true, message: "label不能为空", trigger: "blur" }
-        //   ]
       },
       instructionData: [
         {
@@ -295,7 +211,6 @@ export default {
       }
     },
     remove() {
-      console.log(this.currentData);
       if (this.currentData && this.currentData.length !== 0) {
         this.currentData.forEach(item => {
           this.instructionData = this.instructionData.filter(i => {

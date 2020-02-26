@@ -1,6 +1,6 @@
 <template>
   <div>
-    dataB
+    daata
   </div>
 </template>
 

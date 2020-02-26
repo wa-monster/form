@@ -21,3 +21,15 @@
   transform: rotate(180deg);
 }
 
+
+
+/*导航菜单样式*/
+.menu_box .el-menu{
+  background-color: #f2f2f2;
+}
+.menu_box .el-menu-item.is-active{
+  background-color: #e6e6e6;
+}
+.menu_box .el-menu-item:focus, .menu_box .el-menu-item:hover, .menu_box .el-submenu__title:hover{
+  background-color: #e6e6e6;
+}

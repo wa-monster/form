@@ -16,13 +16,6 @@
         >
           删除
         </el-button>
-        <el-button
-          type="info"
-          size="medium"
-          @click="edit"
-        >
-          修改
-        </el-button>
         <el-input
           v-if="inputVisible"
           ref="searchInput"
@@ -47,6 +40,7 @@
         :data="filterData"
         border
         style="width: 100%"
+        height="500"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -72,7 +66,6 @@
           prop="params"
           label="参数描述"
           align="center"
-          min-width="500"
           :show-overflow-tooltip="true"
           :formatter="formatter"
         ></el-table-column>
@@ -83,6 +76,26 @@
           width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
+        <el-table-column
+          width="180"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            >
+              删除
+            </el-button>
+            <el-button
+              size="mini"
+              @click="edit(scope.row)"
+            >
+              修改
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="myform-footer">
@@ -223,16 +236,14 @@ export default {
         this.$message("请先选择一条数据");
       }
     },
-    edit() {
-      if (this.currentData && this.currentData.length !== 0) {
-        if (this.currentData.length > 1) {
-          this.$message("只能选择一条数据");
-        } else {
-          this.editDialogVisible = true;
-        }
-      } else {
-        this.$message("请先选择一条数据");
-      }
+    handleDelete(item) {
+      this.instructionData = this.instructionData.filter(i => {
+        return item.id !== i.id;
+      });
+    },
+    edit(item) {
+      this.currentData[0] = item;
+      this.editDialogVisible = true;
     },
     showInput() {
       this.inputVisible = true;
@@ -269,8 +280,11 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-.instruction .myform-footer{
+.instruction .myform-footer {
   text-align: right;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
 }
 .sec-form .el-form-item {
   text-align: left;

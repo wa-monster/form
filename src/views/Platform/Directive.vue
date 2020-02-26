@@ -354,7 +354,7 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-.instruction .myForm-footer{
+.instruction .myform-footer{
   text-align: right;
 }
 .sec-form .el-form-item {

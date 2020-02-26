@@ -85,7 +85,18 @@
         ></el-table-column>
       </el-table>
     </div>
-    <div class="myform-footer"></div>
+    <div class="myform-footer">
+      <el-pagination
+        :current-page="currentPage"
+        :page-sizes="[5,10,15,20]"
+        :page-size="2"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="10"
+        :background="true"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
+    </div>
     <addDialog
       :visible="addDialogVisible"
       :form-data="instructionForm"
@@ -173,7 +184,7 @@
 import addDialog from "@/views/dialog/instructionDiaglog.vue";
 import editDialog from "@/views/dialog/instructionDiaglog.vue";
 export default {
-  name:'Directive',
+  name: "Directive",
   components: {
     addDialog,
     editDialog
@@ -222,6 +233,7 @@ export default {
           params: [{ lable: "姓名", name: "name", type: 0, default: "1" }]
         }
       ],
+      currentPage: 1
     };
   },
   computed: {
@@ -324,17 +336,26 @@ export default {
     clearVal() {
       this.inputVisible = false;
       this.inputValue = "";
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
     }
   }
 };
 </script>
 <style>
-.instruction .btn-group{
+.instruction .btn-group {
   margin-bottom: 10px;
 }
 .instruction .searchInput {
   width: 160px;
   margin-left: 10px;
+}
+.instruction .myForm-footer{
+  text-align: right;
 }
 .sec-form .el-form-item {
   text-align: left;

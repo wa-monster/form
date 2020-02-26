@@ -18,7 +18,7 @@
     <el-table
       ref="Table"
       border
-      height="540"
+      height="500"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
@@ -67,7 +67,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="类型"
+        label="操作"
         width="220"
       >
         <template>

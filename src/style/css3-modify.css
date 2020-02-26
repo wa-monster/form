@@ -40,3 +40,10 @@
   bottom: 10px;
   right: 10px;
 }
+
+.el-table .cell{
+  text-align: center;
+}
+.el-table td, .el-table th{
+  padding: 8px 0;
+}

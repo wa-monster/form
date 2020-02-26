@@ -4,6 +4,7 @@
       <el-button
         size="medium"
         type="primary"
+        @click="showDialog"
       >
         添加
       </el-button>
@@ -11,16 +12,7 @@
         size="medium"
         type="danger"
       >
-        删除
-      </el-button>
-      <el-button
-        size="medium"
-        type="info"
-      >
-        修改
-      </el-button>
-      <el-button size="medium">
-        生效
+        删除选中
       </el-button>
     </div>
     <el-table
@@ -74,6 +66,28 @@
           {{ scope.row.type }}
         </template>
       </el-table-column>
+      <el-table-column
+        label="类型"
+        width="220"
+      >
+        <template>
+          <el-button
+            size="mini"
+            type="danger"
+          >
+            删除
+          </el-button>
+          <el-button
+            size="mini"
+            type="info"
+          >
+            修改
+          </el-button>
+          <el-button size="mini">
+            生效
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="page">
       <el-pagination
@@ -87,14 +101,21 @@
       >
       </el-pagination>
     </div>
+    <DataDialog ref="dataDialog">  
+    </DataDialog>
   </div>
 </template>
 
 <script>
 import mixin from '@/views/mixin'
+import DataDialog from '@/components/dialog/dataDialog'
+
 import { getDataList } from '@/api/base/data'
 export default {
   name:'Data',
+  components:{
+    DataDialog
+  },
   mixins:[mixin],
   data(){
     return {
@@ -105,7 +126,7 @@ export default {
     this.load()
   },
   methods:{
-  async load(){
+    async load(){
       try{
         let params = {
           currentPage:this.page.currentPage,
@@ -118,8 +139,12 @@ export default {
       }catch(err){
         throw err
       }
+    },
+    showDialog(){
+      this.$refs.dataDialog.show();
     }
-  }
+  },
+    
 }
 </script>
 

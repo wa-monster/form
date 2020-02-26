@@ -1,7 +1,7 @@
 import 'element-ui/lib/theme-chalk/index.css'
-import '@/common/css/reset.css'
-import '@/common/css/custom.css'
-import '@/common/css/css3-modify.css'
+import '@/style/reset.css'
+import '@/style/custom.css'
+import '@/style/css3-modify.css'
 
 
 import Vue from 'vue'

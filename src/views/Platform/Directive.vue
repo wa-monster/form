@@ -41,7 +41,6 @@
           查询
         </el-button>
       </div>
-      <hr />
     </div>
     <div class="myform-body">
       <el-table
@@ -60,22 +59,29 @@
           label="指令名称"
           width="180"
           align="center"
+          :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           prop="code"
           label="代码"
           align="center"
+          width="180"
+          :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           prop="params"
           label="参数描述"
           align="center"
+          min-width="550"
+          :show-overflow-tooltip="true"
           :formatter="formatter"
         ></el-table-column>
         <el-table-column
           prop="fn"
           label="功能"
           align="center"
+          width="180"
+          :show-overflow-tooltip="true"
         ></el-table-column>
       </el-table>
     </div>
@@ -323,6 +329,9 @@ export default {
 };
 </script>
 <style>
+.instruction .btn-group{
+  margin-bottom: 10px;
+}
 .instruction .searchInput {
   width: 160px;
   margin-left: 10px;

@@ -8,7 +8,6 @@ export const getDataList = function(params){
   })
 }
 
-<<<<<<< HEAD
 export const addData = function(data){
   return axios({
     method:'post',
@@ -24,6 +23,4 @@ export const editData = function(data){
     data
   })
 }
-=======
->>>>>>> b24703754b7bad26151c1859ca09129698f342ea
 

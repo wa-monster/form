@@ -124,8 +124,8 @@
 </template>
 
 <script>
-import addDialog from "@/views/dialog/routerDialog.vue";
-import editDialog from "@/views/dialog/routerDialog.vue";
+import addDialog from "@/components/dialog/routerDialog.vue";
+import editDialog from "@/components/dialog/routerDialog.vue";
 export default {
   name: "Router",
   components: {

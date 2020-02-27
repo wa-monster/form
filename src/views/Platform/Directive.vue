@@ -5,7 +5,7 @@
         <el-button
           type="primary"
           size="medium"
-          @click="addDialogVisible = true"
+          @click="dialogShow"
         >
           添加
         </el-button>
@@ -109,49 +109,32 @@
         @current-change="currentChange"
       ></el-pagination>
     </div>
-    <addDialog
-      :visible="addDialogVisible"
-      :form-data="instructionForm"
-      type="add"
-      @changeSate="closeDiglog"
-    ></addDialog>
-    <editDialog
-      :visible="editDialogVisible"
-      :form-data="currentData[0]"
-      type="edit"
-      @changeSate="closeDiglog"
-    ></editDialog>
+    <Dialog ref="dialog"></Dialog>
   </div>
 </template>
 <script>
 import mixin from "@/views/mixin";
-import addDialog from "@/components/dialog/instructionDialog.vue";
-import editDialog from "@/components/dialog/instructionDialog.vue";
+import Dialog from "@/components/dialog/instructionDialog.vue";
 import { getDirectiveData, delDirectiveData } from "@/api/platform/directive.js";
 export default {
   name: "Directive",
   components: {
-    addDialog,
-    editDialog
+    Dialog,
   },
   mixins: [mixin],
   data() {
     return {
       inputValue: "",
       inputVisible: false,
-      addDialogVisible: false,
-      editDialogVisible: false,
-      formLabelWidth: "80px",
       currentData: [],
-      id: 1,
       instructionForm: {
-        name: "企业新增",
-        code: "gs",
-        fn: "新增企业",
+        name: "",
+        code: "",
+        fn: "",
         type: 0,
         params: [
-          { label: "姓名", name: "name", type: 0, default: "1" },
-          { label: "姓名", name: "name", type: 0, default: "1" }
+          { label: "", name: "", type: 0, default: "" },
+          { label: "", name: "", type: 0, default: "" }
         ]
       },
       instructionData: []
@@ -183,12 +166,8 @@ export default {
         throw err;
       }
     },
-    closeDiglog(state, type) {
-      if (type == "add") {
-        this.addDialogVisible = state;
-      } else {
-        this.editDialogVisible = state;
-      }
+    dialogShow(){
+      this.$refs['dialog'].show();
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -205,31 +184,6 @@ export default {
         item.resetFields();
       });
       this.dialogFormVisible = false;
-    },
-    handleSubmit() {
-      let canSubmit = true;
-      this.$refs["instructionForm"].validate(valid => {
-        if (valid) {
-          for (let i = 0; i < this.$refs["childForm"].length; i++) {
-            this.$refs["childForm"][i].validate(isVaild => {
-              if (!isVaild) {
-                canSubmit = false;
-                return;
-              }
-            });
-          }
-        }
-      });
-      if (canSubmit) {
-        this.instructionForm.id = this.id;
-        this.instructionData.push(this.depClone(this.instructionForm));
-        this.id++;
-        this.$message({
-          message: "添加成功",
-          type: "success"
-        });
-        this.dialogFormVisible = false;
-      }
     },
     remove() {
       if (this.currentData && this.currentData.length !== 0) {
@@ -248,8 +202,7 @@ export default {
       this.delete(data,item,delDirectiveData);
     },
     edit(item) {
-      this.currentData[0] =item;
-      this.editDialogVisible = true;
+      this.$refs['dialog'].show(this.depClone(item));
     },
     showInput() {
       this.inputVisible = true;

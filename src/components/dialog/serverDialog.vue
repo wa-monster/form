@@ -38,7 +38,6 @@
         >
           <el-form
             ref="childForm"
-            :rules="childFormRule"
             size="mini"
             :model="formData.directives[index]"
           >
@@ -67,7 +66,8 @@
             <el-form-item
               label="姓名"
               prop="name"
-              label-width="40px"
+              label-width="50px"
+              :rules="{required:item.directiveName!='',message:'请输入姓名',change:'blur'}"
             >
               <el-input
                 v-model="item.name"
@@ -141,9 +141,6 @@ export default {
         name: [{ required: true, message: "服务名称不能为空", trigger: "blur" }]
       },
       childFormRule: {
-        //   label:[
-        //       { required: true, message: "label不能为空", trigger: "blur" }
-        //   ]
       },
       id: 1
     };
@@ -186,6 +183,8 @@ export default {
               }
             });
           }
+        }else{
+          canSubmit=false
         }
       });
       if (canSubmit) {

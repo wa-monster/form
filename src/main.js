@@ -9,7 +9,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
-
+window.isUpdatingChildComponent = false;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 

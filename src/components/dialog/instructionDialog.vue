@@ -144,7 +144,7 @@
   </el-dialog>
 </template>
 <script>
-import {addDirectiveData} from '@/api/platform/directive'
+import {addDirectiveData,editDirectiveData} from '@/api/platform/directive'
 export default {
   name: "InstructionDiaglog",
   props: {
@@ -228,6 +228,7 @@ export default {
           this.$parent.load();
           this.resetForm();
         } else {
+          let res=await editDirectiveData(this.formData);
           this.$parent.instructionData.forEach(item => {
             if (item.id == this.formData.id) {
               for (let key in item) {
@@ -237,6 +238,7 @@ export default {
               }
             }
           });
+          // this.$parent.load();
           this.$message({
             message: "修改成功",
             type: "success"

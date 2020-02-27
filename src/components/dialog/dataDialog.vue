@@ -94,7 +94,7 @@ export default {
       return {
         dialogVisible: false,
         radio:'',
-        titleName:'',
+        titleName:'添加',
         formData:{
           name:'',
           description:'',
@@ -126,10 +126,9 @@ export default {
       show(row){
         if(row){
           this.titleName = '修改'
-          let {name,description,sign,type,info} = row
-          this.formData = {name,description,sign,type,info}
+          this.formData = {...row}
         }else{
-          this.titleName = '增加'
+          this.titleName = '添加'
           this.clearForm()
         }
         this.dialogVisible = true
@@ -156,13 +155,13 @@ export default {
       },
       async addOrEdit(){
         try{
-          let res
           if(this.titleName === '修改'){
-            res = await editData(this.formData)
+            await editData(this.formData)
+            this.$message.success('修改成功')
           }else{
-            res = await addData(this.formData)
+            await addData(this.formData)
+            this.$message.success('添加成功')
           }
-          this.$message.success('添加成功')
           this.clearForm()
           this.dialogVisible = false
           this.$emit('onload')

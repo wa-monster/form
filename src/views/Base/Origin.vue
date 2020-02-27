@@ -25,9 +25,8 @@
     <el-table
       ref="Table"
       border
-      height="500"
+      height="425"
       :data="tableData"
-      tooltip-effect="dark"
       style="width: 100%"
       @selection-change="tableSelect"
     >
@@ -123,7 +122,7 @@ import DataDialog from '@/components/dialog/dataDialog'
 
 import { getDataList,activeData,deleteData } from '@/api/base/data'
 export default {
-  name:'Data',
+  name:'Origin',
   components:{
     DataDialog
   },

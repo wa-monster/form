@@ -4,6 +4,7 @@
     <el-row class="main">
       <Sidebar v-if="openTop && openMenu">
       </Sidebar>
+      
       <div
         class="box"
         :style="(!openMenu||!openTop)? {width: '100%'}:{width:'calc(100% - 200px)'}"
@@ -59,4 +60,5 @@ export default{
     // background-color:#f5f5f5;
   }
 }
+
 </style>

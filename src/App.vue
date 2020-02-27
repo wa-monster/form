@@ -12,6 +12,7 @@ heml,body{
 }
 #app{
   height 100%;
+  min-width 1200px
 }
 </style>
 

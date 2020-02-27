@@ -147,27 +147,6 @@
 import {addDirectiveData,editDirectiveData} from '@/api/platform/directive'
 export default {
   name: "InstructionDiaglog",
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "add"
-    },
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    formData: {
-      type: Object,
-      required: true,
-      default:()=>{
-        return {};
-      }
-    }
-  },
   data() {
     return {
       formLabelWidth: "80px",
@@ -182,24 +161,63 @@ export default {
         type: [{ required: true, message: "类型不能为空", trigger: "change" }]
       },
       childFormRule: {
-        //   label:[
-        //       { required: true, message: "label不能为空", trigger: "blur" }
-        //   ]
       },
-      id: 1
+      id: 1,
+      visible:false,
+      title:"",
+      formData:{
+        name: "",
+        code: "",
+        fn: "",
+        type: 0,
+        params: [
+          { label: "", name: "", type: 0, default: "" },
+          { label: "", name: "", type: 0, default: "" }
+        ]
+      },
+      type:"add",
     };
   },
   methods: {
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
     },
+    show(item){
+      if(item){
+        for(let key in item){
+          this.formData[key]=item[key];
+        }
+        this.title="修改"
+        this.type="edit"
+      }else{
+        this.title="添加"
+        this.type="add"
+      }
+      this.visible=true;
+    },
     resetForm() {
       this.$refs["formData"].resetFields();
       this.$refs["childForm"].forEach(item => {
         item.resetFields();
       });
-      let state = false;
-      this.$emit("changeSate", state, this.type);
+      for(let key in this.formData){
+        if(key=="params"){
+          this.formData[key].forEach((item)=>{
+            for(let i in item){
+              if(i=="type"){
+                item[i]=0
+              }else{
+                item[i]=""
+              }
+            }
+          })
+        }else if(key=="type"){
+          this.formData[key]=0
+        }else{
+          this.formData[key]=""
+        }
+      }
+      this.visible=false;
     },
     async handleSubmit() {
       let canSubmit = true;
@@ -217,33 +235,23 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
-          this.$parent.instructionForm.id = this.id;
-          // this.$parent.instructionData.push(this.depClone(this.formData));
+          this.formData.id = this.id;
           let res=await addDirectiveData(this.formData);
           this.id++;
+          this.$parent.load();
           this.$message({
             message: "添加成功",
             type: "success"
           });
-          this.$parent.load();
           this.resetForm();
         } else {
           let res=await editDirectiveData(this.formData);
-          this.$parent.instructionData.forEach(item => {
-            if (item.id == this.formData.id) {
-              for (let key in item) {
-                if (key !== "id") {
-                  item[key] = this.formData[key];
-                }
-              }
-            }
-          });
-          // this.$parent.load();
+          this.$parent.load();
           this.$message({
             message: "修改成功",
             type: "success"
           });
-          this.$parent.editDialogVisible = false;
+          this.resetForm();
         }
       }
     }

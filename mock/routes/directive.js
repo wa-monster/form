@@ -1,7 +1,7 @@
 let bodyParser = require('body-parser')
 let jsonParser = bodyParser.json();
 let directiveData = require('../sql/directiveData')
-let id = 1
+let id = 11
 module.exports = function (app) {
   app.get('/directiveData', (req, res, next) => {
     let { currentPage, pageSize } = req.query

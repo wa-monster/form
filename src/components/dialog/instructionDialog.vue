@@ -162,7 +162,6 @@ export default {
       },
       childFormRule: {
       },
-      id: 1,
       visible:false,
       title:"",
       formData:{
@@ -235,7 +234,6 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
-          this.formData.id = this.id;
           let res=await addDirectiveData(this.formData);
           this.id++;
           this.$parent.load();

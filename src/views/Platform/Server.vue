@@ -208,7 +208,12 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-
+.server .myform-footer {
+  text-align: right;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
+}
 .server .myform-footer {
   text-align: right;
 }

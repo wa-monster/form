@@ -127,7 +127,7 @@
 import mixin from "@/views/mixin";
 import addDialog from "@/components/dialog/instructionDialog.vue";
 import editDialog from "@/components/dialog/instructionDialog.vue";
-import { getDirectiveData, delDirectiveData } from "@/api/base/data";
+import { getDirectiveData, delDirectiveData } from "@/api/platform/directive.js";
 export default {
   name: "Directive",
   components: {

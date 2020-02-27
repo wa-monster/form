@@ -21,7 +21,6 @@ export default {
     },
     currentChange(currentPage){
       this.page.currentPage = currentPage
-      this.load()
     },
     async delete(data, item,fn) {
       try {
@@ -35,15 +34,14 @@ export default {
           params.push(item.id);
         }
         let res = await fn(params);
-        data.forEach((i, index) => {
-          if (item.id === i.id) {
-            data.splice(index, 1);
-          }
-        });
-        if (data.length === 0) {
+        if (data.length === 1) {
           if (this.page.currentPage > 1) {
             this.page.currentPage--;
+          }else{
+            this.load()
           }
+        }else{
+          this.load();
         }
       } catch (err) {
         throw err;

@@ -88,33 +88,14 @@ const server = [
     label: "企业新增服务3"
   }
 ];
+import {addRouterData,editRouterData} from '@/api/platform/router'
 export default {
   name: "RouterDialog",
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "add"
-    },
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    formData: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {};
-      }
-    }
-  },
+  props: {},
   data() {
     return {
       formLabelWidth: "80px",
-      server:server,
+      server: server,
       routerFormRule: {
         name: [
           { required: true, message: "路由名称不能为空", trigger: "blur" }
@@ -127,52 +108,67 @@ export default {
           { required: true, message: "服务不能不能为空", trigger: "change" }
         ]
       },
-      id: 1
+      title: "",
+      type: "add",
+      visible: "",
+      formData: {
+        name: "",
+        controller: "",
+        prefix: "",
+        server: ""
+      }
     };
   },
   methods: {
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
     },
+    show(item) {
+      if (item) {
+        for (let key in item) {
+          this.formData[key] = item[key];
+        }
+        this.title = "修改";
+        this.type = "edit";
+      } else {
+        this.title = "添加";
+        this.type = "add";
+      }
+      this.visible = true;
+    },
     resetForm() {
       this.$refs["formData"].resetFields();
-      let state = false;
-      this.$emit("changeSate", state, this.type);
+      for (let key in this.formData) {
+        this.formData[key] = "";
+      }
+      this.visible = false;
     },
-    handleSubmit() {
+    async handleSubmit() {
       let canSubmit = true;
       this.$refs["formData"].validate(valid => {
         if (valid) {
           canSubmit = true;
-        }else{
+        } else {
           canSubmit = false;
         }
       });
       if (canSubmit) {
         if (this.type == "add") {
-          this.$parent.routeForm.id = this.id;
-          this.$parent.routeData.push(this.depClone(this.formData));
-          this.id++;
+          let res=await addRouterData(this.formData);
+          this.$parent.load();
           this.$message({
             message: "添加成功",
             type: "success"
           });
           this.resetForm();
         } else {
-          this.$parent.routeData.forEach(item => {
-            if (item.id == this.formData.id) {
-              for (let key in item) {
-                if (key !== "id") {
-                  item[key] = this.formData[key];
-                }
-              }
-            }
-          });
+          let res=await editRouterData(this.formData);
+          this.$parent.load();
           this.$message({
             message: "修改成功",
             type: "success"
           });
-          this.$parent.editDialogVisible = false;
+          this.resetForm();
         }
       }
     }

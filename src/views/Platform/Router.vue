@@ -5,7 +5,7 @@
         <el-button
           type="primary"
           size="medium"
-          @click="addDialogVisible=true"
+          @click="dialogShow"
         >
           添加
         </el-button>
@@ -98,63 +98,36 @@
     </div>
     <div class="myform-footer">
       <el-pagination
-        :current-page="currentPage"
-        :page-sizes="[5,10,15,20]"
-        :page-size="2"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="10"
+        :total="page.total"
         :background="true"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
       ></el-pagination>
     </div>
-    <addDialog
-      :visible="addDialogVisible"
-      :form-data="routeForm"
-      type="add"
-      @changeSate="closeDiglog"
-    ></addDialog>
-    <editDialog
-      :visible="editDialogVisible"
-      :form-data="currentData[0]"
-      type="edit"
-      @changeSate="closeDiglog"
-    ></editDialog>
+    <Dialog ref="dialog"></Dialog>
   </div>
 </template>
 
 <script>
-import addDialog from "@/components/dialog/routerDialog.vue";
-import editDialog from "@/components/dialog/routerDialog.vue";
+import mixin from "@/views/mixin";
+import Dialog from "@/components/dialog/routerDialog.vue";
+import { getRouterData, delRouterData } from "@/api/platform/router.js";
 export default {
   name: "Router",
   components: {
-    addDialog,
-    editDialog
+    Dialog
   },
+  mixins: [mixin],
   data() {
     return {
-      addDialogVisible: false,
-      editDialogVisible: false,
       currentData: [],
       inputValue: "",
       currentPage: 1,
       inputVisible: false,
-      routeForm: {
-        name: "",
-        controller: "gs",
-        prefix: "新增企业",
-        server: ""
-      },
-      routeData: [
-        {
-          id: 0,
-          name: "新增企业",
-          controller: "/gs/sa",
-          prefix: "/auto",
-          server: "企业新增服务"
-        }
-      ]
+      routeData: []
     };
   },
   computed: {
@@ -166,16 +139,30 @@ export default {
       );
     }
   },
-  created() {},
+  created() {
+    this.load();
+  },
   mounted() {},
   methods: {
+    async load() {
+      try {
+        let params = {
+          currentPage: this.page.currentPage,
+          pageSize: this.page.pageSize
+        };
+        let res = await getRouterData(params);
+        this.routeData = res.list;
+        this.page.total = res.total;
+      } catch (err) {
+        throw err;
+      }
+    },
+    dialogShow() {
+      this.$refs["dialog"].show();
+    },
     remove() {
       if (this.currentData && this.currentData.length !== 0) {
-        this.currentData.forEach(item => {
-          this.routeData = this.routeData.filter(i => {
-            return item.id !== i.id;
-          });
-        });
+        this.delete(this.routeData,this.currentData,delRouterData);
         this.$message({ message: "删除成功", type: "success" });
         this.currentData = [];
       } else {
@@ -183,20 +170,10 @@ export default {
       }
     },
     handleDelete(item) {
-      this.routeData = this.routeData.filter(i => {
-        return item.id !== i.id;
-      });
+      this.delete(this.routeData,item,delRouterData);
     },
     edit(item) {
-      this.currentData[0] = item;
-      this.editDialogVisible = true;
-    },
-    closeDiglog(state, type) {
-      if (type == "add") {
-        this.addDialogVisible = state;
-      } else {
-        this.editDialogVisible = state;
-      }
+      this.$refs['dialog'].show(this.depClone(item));
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -221,12 +198,6 @@ export default {
     clearVal() {
       this.inputVisible = false;
       this.inputValue = "";
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
     }
   }
 };
@@ -241,7 +212,12 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-
+.router .myform-footer {
+  text-align: right;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
+}
 .router .myform-footer {
   text-align: right;
 }

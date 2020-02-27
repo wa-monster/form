@@ -1,30 +1,30 @@
 let bodyParser = require('body-parser')
 let jsonParser = bodyParser.json();
-let directiveData = require('../sql/directiveData')
+let routerData = require('../sql/routerData')
 let id = 11
 module.exports = function (app) {
-  app.get('/directiveData', (req, res, next) => {
+  app.get('/routerData', (req, res, next) => {
     let { currentPage, pageSize } = req.query
-    let list = directiveData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let list = routerData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
-      total: directiveData.length
+      total: routerData.length
     })
   })
-  app.post('/addDirectiveData', jsonParser, (req, res, next) => {
+  app.post('/addRouterData', jsonParser, (req, res, next) => {
     req.body.id = id;
     id++;
-    directiveData.push(req.body)
+    routerData.push(req.body)
     return res.json({
       code: 0,
       message: '添加成功'
     })
   })
 
-  app.post('/delDirectiveData', jsonParser, (req, res, next) => {
+  app.post('/delRouterData', jsonParser, (req, res, next) => {
     req.body.forEach(item => {
-      directiveData = directiveData.filter(i => {
+      routerData = routerData.filter(i => {
         return item !== i.id;
       });
     });
@@ -34,8 +34,8 @@ module.exports = function (app) {
     })
   })
 
-  app.post('/editDirectiveData', jsonParser, (req, res, next) => {
-    directiveData.forEach((item) => {
+  app.post('/editRouterData', jsonParser, (req, res, next) => {
+    routerData.forEach((item) => {
       if (item.id == req.body.id) {
         for (let key in item) {
           item[key] = req.body[key];

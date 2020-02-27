@@ -235,7 +235,6 @@ export default {
       if (canSubmit) {
         if (this.type == "add") {
           let res=await addDirectiveData(this.formData);
-          this.id++;
           this.$parent.load();
           this.$message({
             message: "添加成功",

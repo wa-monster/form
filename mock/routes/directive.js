@@ -1,6 +1,6 @@
 let bodyParser = require('body-parser')
 let jsonParser = bodyParser.json();
-let directiveData = require('./directiveData')
+let directiveData = require('../sql/directiveData')
 let id = 1
 module.exports = function (app) {
   app.get('/directiveData', (req, res, next) => {
@@ -12,7 +12,6 @@ module.exports = function (app) {
       total: directiveData.length
     })
   })
-
   app.post('/addDirectiveData', jsonParser, (req, res, next) => {
     req.body.id = id;
     id++;

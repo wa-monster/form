@@ -248,7 +248,7 @@ export default {
       this.delete(data,item,delDirectiveData);
     },
     edit(item) {
-      this.currentData[0] = item;
+      this.currentData[0] =item;
       this.editDialogVisible = true;
     },
     showInput() {

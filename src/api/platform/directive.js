@@ -20,3 +20,11 @@ export const delDirectiveData=function(params){
     data:params
   }) 
 }
+
+export const editDirectiveData=function(params){
+  return axios({
+    method:'post',
+    url:'/editDirectiveData',
+    data:params
+  }) 
+}

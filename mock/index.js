@@ -43,4 +43,18 @@ module.exports = function (app) {
       message: '删除成功'
     })
   })
+
+  app.post('/editDirectiveData', jsonParser, (req, res, next) => {
+    directiveData.forEach((item)=>{
+      if(item.id==req.body.id){
+        for(let key in item){
+          item[key]=req.body[key];
+        }
+      }
+    })
+    return res.json({
+      code: 0,
+      message: '修改成功'
+    })
+  })
 }

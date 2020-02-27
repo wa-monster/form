@@ -9,6 +9,11 @@ export default {
 
     }
   },
+  watch:{
+    'page.currentPage'(){
+      this.load()
+    }
+  },
   methods:{
     sizeChange(size){
       this.page.pageSize = size

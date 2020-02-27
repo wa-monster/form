@@ -84,7 +84,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row)"
+              @click="handleDelete(instructionData,scope.row)"
             >
               删除
             </el-button>
@@ -100,14 +100,13 @@
     </div>
     <div class="myform-footer">
       <el-pagination
-        :current-page="currentPage"
-        :page-sizes="[5,10,15,20]"
-        :page-size="2"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="10"
+        :total="page.total"
         :background="true"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
       ></el-pagination>
     </div>
     <addDialog
@@ -125,14 +124,17 @@
   </div>
 </template>
 <script>
+import mixin from "@/views/mixin";
 import addDialog from "@/views/dialog/instructionDialog.vue";
 import editDialog from "@/views/dialog/instructionDialog.vue";
+import { getDirectiveData, delDirectiveData } from "@/api/base/data";
 export default {
   name: "Directive",
   components: {
     addDialog,
     editDialog
   },
+  mixins: [mixin],
   data() {
     return {
       inputValue: "",
@@ -152,17 +154,7 @@ export default {
           { label: "姓名", name: "name", type: 0, default: "1" }
         ]
       },
-      instructionData: [
-        {
-          id: 0,
-          name: "企业新增",
-          code: "gs",
-          fn: "新增企业",
-          type: 0,
-          params: [{ lable: "姓名", name: "name", type: 0, default: "1" }]
-        }
-      ],
-      currentPage: 1
+      instructionData: []
     };
   },
   computed: {
@@ -174,7 +166,49 @@ export default {
       );
     }
   },
+  created() {
+    this.load();
+  },
   methods: {
+    async load() {
+      try {
+        let params = {
+          currentPage: this.page.currentPage,
+          pageSize: this.page.pageSize
+        };
+        let res = await getDirectiveData(params);
+        this.instructionData = res.list;
+        this.page.total = res.total;
+      } catch (err) {
+        throw err;
+      }
+    },
+    async delete(data, item,fn) {
+      try {
+        let params;
+        if(Array.isArray(item)){
+          params=item.map((item)=>{
+            return item.id;
+          })
+        }else{
+          params=[];
+          params.push(item.id);
+        }
+        let res = await fn(params);
+        data.forEach((i, index) => {
+          if (item.id === i.id) {
+            data.splice(index, 1);
+          }
+        });
+        if (data.length === 0) {
+          if (this.page.currentPage > 1) {
+            this.page.currentPage--;
+          }
+        }
+      } catch (err) {
+        throw err;
+      }
+    },
     closeDiglog(state, type) {
       if (type == "add") {
         this.addDialogVisible = state;
@@ -236,10 +270,8 @@ export default {
         this.$message("请先选择一条数据");
       }
     },
-    handleDelete(item) {
-      this.instructionData = this.instructionData.filter(i => {
-        return item.id !== i.id;
-      });
+    handleDelete(data, item) {
+      this.delete(data,item,delDirectiveData);
     },
     edit(item) {
       this.currentData[0] = item;
@@ -262,12 +294,6 @@ export default {
     clearVal() {
       this.inputVisible = false;
       this.inputValue = "";
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
     }
   }
 };

@@ -24,3 +24,21 @@ export const editData = function(data){
   })
 }
 
+export const activeData = function(data){
+  return axios({
+    method:'post',
+    url:'/activeData',
+    data
+  })
+}
+
+export const deleteData = function(data){
+  return axios({
+    method:'post',
+    url:'/deleteData',
+    data
+  })
+}
+
+
+

@@ -11,10 +11,14 @@
       <el-button
         size="medium"
         type="danger"
+        @click="deleteAllClick"
       >
         删除选中
       </el-button>
-      <el-button size="medium">
+      <el-button
+        size="medium"
+        @click="activeClick"
+      >
         选中生效
       </el-button>
     </div>
@@ -25,6 +29,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
+      @selection-change="tableSelect"
     >
       <el-table-column
         type="selection"
@@ -72,9 +77,16 @@
       <el-table-column
         v-slot="scope"
         label="操作"
-        width="120"
+        width="160"
       >
         <template>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="deleteClick(scope)"
+          >
+            删除
+          </el-button>
           <el-button
             size="mini"
             type="info"
@@ -109,7 +121,7 @@
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
 
-import { getDataList } from '@/api/base/data'
+import { getDataList,activeData,deleteData } from '@/api/base/data'
 export default {
   name:'Data',
   components:{
@@ -118,7 +130,8 @@ export default {
   mixins:[mixin],
   data(){
     return {
-      tableData:[]
+      tableData:[],
+      activeData:[],
     }
   },
   mounted(){
@@ -144,6 +157,41 @@ export default {
     },
     editDialog(scope){
        this.$refs.dataDialog.show(scope.row);
+    },
+    tableSelect(selection){
+      this.activeData = selection
+    },
+    deleteAllClick(){
+      if(this.activeData.length === 0){
+        return 
+      }
+      this.$alert(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          callback: action => {
+            this.delete(this.tableData,this.activeData,deleteData)
+          }
+        });
+      
+    },
+    deleteClick(scope){
+      let row = scope.row
+      this.$alert('确定要删除本行内容?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          callback: action => {
+            this.delete(this.tableData,[row],deleteData)
+          }
+        });
+      
+    },
+    async activeClick(){
+      try{
+        let res = await activeData(this.activeData)
+        this.$message.success('生效成功')
+      }catch(err){
+        throw err
+      }
     }
   },
     

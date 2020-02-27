@@ -9,9 +9,9 @@ const base =   {
   },
   children:[
     {
-      path: 'data',
-      name: 'Data',
-      component: ()=> import(/* webpackChunkName: "BaseData" */ '../views/Base/Data.vue'),
+      path: 'origin',
+      name: 'Origin',
+      component: ()=> import(/* webpackChunkName: "BaseData" */ '../views/Base/Origin.vue'),
       meta:{
         name:'数据源设置',
       },

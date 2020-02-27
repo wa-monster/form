@@ -1,0 +1,32 @@
+exports.autoList = [
+  {
+    origin:'工商数据源1',
+    name:'主体表',
+    remark:'存放主题信息',
+    create:'Y'
+  },
+  {
+    origin:'工商数据源2',
+    name:'主体表',
+    remark:'存放主题信息',
+    create:'Y'
+  },
+  {
+    origin:'工商数据源3',
+    name:'主体表',
+    remark:'存放主题信息',
+    create:'Y'
+  },
+  {
+    origin:'工商数据源4',
+    name:'主体表',
+    remark:'存放主题信息',
+    create:'Y'
+  },
+  {
+    origin:'工商数据源5',
+    name:'主体表',
+    remark:'存放主题信息',
+    create:'Y'
+  }
+]

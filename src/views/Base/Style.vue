@@ -4,54 +4,106 @@
       <el-button
         size="medium"
         type="primary"
-        @click="showDialog"
+        @click="add"
       >
         添加
       </el-button>
 
       <el-button
         size="medium"
-        @click="activeClick"
+        @click="active"
       >
         生效
       </el-button>
     </div>
     <el-form
       class="style_main"
-      label-width="200"
+      :model="formData"
+      :rules="rules"
+      label-width="70px"
     >
-      <el-form-item label="主题">
-        <el-radio label="blue">
+      <el-form-item
+        label="主题"
+        prop="theme"
+      >
+        <el-radio
+          v-model="formData.theme"
+          label="blue"
+        >
           蓝色
         </el-radio>
-        <el-radio label="red">
+        <el-radio
+          v-model="formData.theme"
+          label="red"
+        >
           红色
         </el-radio>
       </el-form-item>
-      <el-form-item label="布局">
-        <div class="layout_radio">
-          <el-radio label="leftTop">
-            左上布局
+      <el-form-item
+        label="布局"
+        prop="layout"
+      >
+        <el-col
+          v-for="(item,index) in list"
+          :key="index"
+          :span="12"
+        >
+          <el-radio
+            v-model="formData.layout"
+            :label="item.val"
+          >
+            {{ item.name }}
           </el-radio>
-        </div>
-        <div class="layout_radio">
-          <el-radio label="rightTop">
-            右上布局
-          </el-radio>
-        </div>
+          <br>
+          <img
+            class="layout_img"
+            :src="item.url"
+            :alt="`${item.name}图片`"
+          >
+        </el-col>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import left from '@/assets/leftTop.jpg'
+import right from '@/assets/rightTop.jpg'
 export default {
   name:"Style",
+  data(){
+    return {
+      list:[
+        {
+          url:left,
+          name:'左上布局',
+          val:'leftTop'
+        },
+        {
+          url:right,
+          name:'右上布局',
+          val:'rightTop'
+        }
+      ],
+      formData:{
+        theme:'blue',
+        layout:'leftTop'
+      },
+      rules:{
+        theme:[
+          {required:true,message:'请选择主题',trigger:'cahnge'}
+        ],
+        layout:[
+          {required:true,message:'请选择布局',trigger:'cahnge'}
+        ]
+      }
+    }
+  },
   methods:{
-    showDialog(){
+    add(){
 
     },
-    activeClick(){
+    active(){
       
     }
   }
@@ -64,16 +116,15 @@ export default {
   height:100%;
   position: relative;
   .style_btn{
-    margin-bottom:20px;
+    margin-bottom:50px;
   }
   .style_main{
     width: 80%;
     margin:0 auto;
-    border:1px solid #ccc;
   }
 }
-.layout_radio{
-  display:inline-block;
-  width:calc(50% - 35px)
+.layout_img{
+  width:320px;
+  height:180px; 
 }
 </style>

@@ -46,5 +46,11 @@
   text-align: center;
 }
 .el-table td, .el-table th{
-  padding: 8px 0;
+  padding: 5px 0;
+}
+.page_scrollbar{
+  height:100%;
+}
+.el-scrollbar__wrap{
+  overflow-x:hidden;
 }

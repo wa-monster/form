@@ -1,6 +1,6 @@
 let bodyParser = require('body-parser')
 let jsonParser = bodyParser.json();
-let { datalist } = require('../sql/data')
+let { datalist } = require('../sql/origin')
 module.exports = function (app) {
    /*
   *数据源列表

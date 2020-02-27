@@ -1,7 +1,12 @@
 
+//数据源设置接口
+let data=require('./routes/origin')
+//自动生成器接口
+let auto = require('./routes/auto')
 let directive=require('./routes/directive')
-let data=require('./routes/data')
+
 module.exports = function (app) {
-  directive(app);
   data(app);
+  auto(app);
+  directive(app);
 }

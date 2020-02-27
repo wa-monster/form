@@ -1,3 +1,4 @@
+import axios from '@/util/request'
 export const getDirectiveData=function(params){
   return axios({
     method:'get',

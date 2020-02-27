@@ -144,7 +144,7 @@
   </el-dialog>
 </template>
 <script>
-import {addDirectiveData} from '@/api/base/data'
+import {addDirectiveData} from '@/api/platform/directive'
 export default {
   name: "InstructionDiaglog",
   props: {

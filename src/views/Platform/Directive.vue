@@ -16,13 +16,6 @@
         >
           删除
         </el-button>
-        <el-button
-          type="info"
-          size="medium"
-          @click="edit"
-        >
-          修改
-        </el-button>
         <el-input
           v-if="inputVisible"
           ref="searchInput"
@@ -47,6 +40,7 @@
         :data="filterData"
         border
         style="width: 100%"
+        height="500"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -72,7 +66,6 @@
           prop="params"
           label="参数描述"
           align="center"
-          min-width="500"
           :show-overflow-tooltip="true"
           :formatter="formatter"
         ></el-table-column>
@@ -83,18 +76,37 @@
           width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
+        <el-table-column
+          width="180"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(instructionData,scope.row)"
+            >
+              删除
+            </el-button>
+            <el-button
+              size="mini"
+              @click="edit(scope.row)"
+            >
+              修改
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="myform-footer">
       <el-pagination
-        :current-page="currentPage"
-        :page-sizes="[5,10,15,20]"
-        :page-size="2"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="10"
+        :total="page.total"
         :background="true"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
       ></el-pagination>
     </div>
     <addDialog
@@ -112,14 +124,17 @@
   </div>
 </template>
 <script>
-import addDialog from "@/views/dialog/instructionDialog.vue";
-import editDialog from "@/views/dialog/instructionDialog.vue";
+import mixin from "@/views/mixin";
+import addDialog from "@/components/dialog/instructionDialog.vue";
+import editDialog from "@/components/dialog/instructionDialog.vue";
+import { getDirectiveData, delDirectiveData } from "@/api/base/data";
 export default {
   name: "Directive",
   components: {
     addDialog,
     editDialog
   },
+  mixins: [mixin],
   data() {
     return {
       inputValue: "",
@@ -139,17 +154,7 @@ export default {
           { label: "姓名", name: "name", type: 0, default: "1" }
         ]
       },
-      instructionData: [
-        {
-          id: 0,
-          name: "企业新增",
-          code: "gs",
-          fn: "新增企业",
-          type: 0,
-          params: [{ lable: "姓名", name: "name", type: 0, default: "1" }]
-        }
-      ],
-      currentPage: 1
+      instructionData: []
     };
   },
   computed: {
@@ -161,7 +166,23 @@ export default {
       );
     }
   },
+  created() {
+    this.load();
+  },
   methods: {
+    async load() {
+      try {
+        let params = {
+          currentPage: this.page.currentPage,
+          pageSize: this.page.pageSize
+        };
+        let res = await getDirectiveData(params);
+        this.instructionData = res.list;
+        this.page.total = res.total;
+      } catch (err) {
+        throw err;
+      }
+    },
     closeDiglog(state, type) {
       if (type == "add") {
         this.addDialogVisible = state;
@@ -223,16 +244,12 @@ export default {
         this.$message("请先选择一条数据");
       }
     },
-    edit() {
-      if (this.currentData && this.currentData.length !== 0) {
-        if (this.currentData.length > 1) {
-          this.$message("只能选择一条数据");
-        } else {
-          this.editDialogVisible = true;
-        }
-      } else {
-        this.$message("请先选择一条数据");
-      }
+    handleDelete(data, item) {
+      this.delete(data,item,delDirectiveData);
+    },
+    edit(item) {
+      this.currentData[0] = item;
+      this.editDialogVisible = true;
     },
     showInput() {
       this.inputVisible = true;
@@ -251,12 +268,6 @@ export default {
     clearVal() {
       this.inputVisible = false;
       this.inputValue = "";
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
     }
   }
 };
@@ -269,8 +280,11 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-.instruction .myform-footer{
+.instruction .myform-footer {
   text-align: right;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
 }
 .sec-form .el-form-item {
   text-align: left;

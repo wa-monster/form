@@ -144,6 +144,7 @@
   </el-dialog>
 </template>
 <script>
+import {addDirectiveData} from '@/api/base/data'
 export default {
   name: "InstructionDiaglog",
   props: {
@@ -200,7 +201,7 @@ export default {
       let state = false;
       this.$emit("changeSate", state, this.type);
     },
-    handleSubmit() {
+    async handleSubmit() {
       let canSubmit = true;
       this.$refs["formData"].validate(valid => {
         if (valid) {
@@ -217,12 +218,14 @@ export default {
       if (canSubmit) {
         if (this.type == "add") {
           this.$parent.instructionForm.id = this.id;
-          this.$parent.instructionData.push(this.depClone(this.formData));
+          // this.$parent.instructionData.push(this.depClone(this.formData));
+          let res=await addDirectiveData(this.formData);
           this.id++;
           this.$message({
             message: "添加成功",
             type: "success"
           });
+          this.$parent.load();
           this.resetForm();
         } else {
           this.$parent.instructionData.forEach(item => {

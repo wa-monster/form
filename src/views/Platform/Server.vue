@@ -98,8 +98,8 @@
 </template>
 
 <script>
-import addDialog from "@/views/dialog/serverDialog.vue";
-import editDialog from "@/views/dialog/serverDialog.vue";
+import addDialog from "@/components/dialog/serverDialog.vue";
+import editDialog from "@/components/dialog/serverDialog.vue";
 export default {
   name: "Server",
   components: {

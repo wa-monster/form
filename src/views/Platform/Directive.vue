@@ -187,11 +187,7 @@ export default {
     },
     remove() {
       if (this.currentData && this.currentData.length !== 0) {
-        this.currentData.forEach(item => {
-          this.instructionData = this.instructionData.filter(i => {
-            return item.id !== i.id;
-          });
-        });
+        this.delete(this.instructionData,this.currentData,delDirectiveData);
         this.$message({ message: "删除成功", type: "success" });
         this.currentData = [];
       } else {

@@ -17,6 +17,30 @@ module.exports = function (app) {
       total: datalist.length
     })
   })
+ //增加列表
+  app.post('/addData',(req,res,next)=>{
+    return res.json({
+      code:0,
+    })
+  })
+  //编辑列表
+  app.post('/editData',(req,res)=>{
+    return res.json({
+      code:0,
+    })
+  })
+  //删除列表
+  app.post('/deleteData',(req,res)=>{
+    return res.json({
+      code:0,
+    })
+  })
+  //列表生效
+  app.post('/activeData',(req,res)=>{
+    return res.json({
+      code:0,
+    })
+  })
 
   app.get('/directiveData', (req, res, next) => {
     let { currentPage, pageSize } = req.query
@@ -47,16 +71,5 @@ module.exports = function (app) {
       message: '删除成功'
     })
   })
-  //增加列表
-  app.post('/addData',(req,res,next)=>{
-    return res.json({
-      code:0,
-    })
-  })
-  //编辑列表
-  app.post('/editData',(req,res)=>{
-    return res.json({
-      code:0,
-    })
-  })
+ 
 }

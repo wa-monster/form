@@ -25,6 +25,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
+      @selection-change="tableSelect"
     >
       <el-table-column
         type="selection"
@@ -109,7 +110,7 @@
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
 
-import { getDataList } from '@/api/base/data'
+import { getDataList,activeData,deleteData } from '@/api/base/data'
 export default {
   name:'Data',
   components:{
@@ -118,7 +119,8 @@ export default {
   mixins:[mixin],
   data(){
     return {
-      tableData:[]
+      tableData:[],
+      activeData:[],
     }
   },
   mounted(){
@@ -144,6 +146,14 @@ export default {
     },
     editDialog(scope){
        this.$refs.dataDialog.show(scope.row);
+    },
+    tableSelect(selection){
+      this.activeData = selection.map(item=>{
+        return item.id
+      })
+    },
+    deleteClick(){
+
     }
   },
     

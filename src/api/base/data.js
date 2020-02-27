@@ -8,4 +8,19 @@ export const getDataList = function(params){
   })
 }
 
+export const addData = function(data){
+  return axios({
+    method:'post',
+    url:'/addData',
+    data
+  })
+}
+
+export const editData = function(data){
+  return axios({
+    method:'post',
+    url:'/editData',
+    data
+  })
+}
 

@@ -14,6 +14,9 @@
       >
         删除选中
       </el-button>
+      <el-button size="medium">
+        选中生效
+      </el-button>
     </div>
     <el-table
       ref="Table"
@@ -67,24 +70,17 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-slot="scope"
         label="操作"
-        width="220"
+        width="120"
       >
         <template>
           <el-button
             size="mini"
-            type="danger"
-          >
-            删除
-          </el-button>
-          <el-button
-            size="mini"
             type="info"
+            @click="editDialog(scope)"
           >
             修改
-          </el-button>
-          <el-button size="mini">
-            生效
           </el-button>
         </template>
       </el-table-column>
@@ -101,7 +97,10 @@
       >
       </el-pagination>
     </div>
-    <DataDialog ref="dataDialog">  
+    <DataDialog
+      ref="dataDialog"
+      @onload="load"
+    >  
     </DataDialog>
   </div>
 </template>
@@ -142,6 +141,9 @@ export default {
     },
     showDialog(){
       this.$refs.dataDialog.show();
+    },
+    editDialog(scope){
+       this.$refs.dataDialog.show(scope.row);
     }
   },
     

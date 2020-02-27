@@ -190,8 +190,8 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
-          this.$parent.directiveForm.id = this.id;
-          this.$parent.directiveData.push(this.depClone(this.formData));
+          this.$parent.serverForm.id = this.id;
+          this.$parent.serverData.push(this.depClone(this.formData));
           this.id++;
           this.$message({
             message: "添加成功",

@@ -19,11 +19,10 @@
         <el-input
           v-if="inputVisible"
           ref="searchInput"
-          v-model="inputValue"
+          v-model="page.keywords"
           class="searchInput"
           size="medium"
-          placeholder="请输入路由名称"
-          @keyup.enter.native="handleInputConfirm"
+          placeholder="请输入服务名称"
           @blur="clearVal"
         ></el-input>
         <el-button
@@ -120,7 +119,6 @@ export default {
   data() {
     return {
       currentData: [],
-      inputValue: "",
       currentPage: 1,
       inputVisible: false,
       pageData: []
@@ -130,8 +128,8 @@ export default {
     filterData() {
       return this.pageData.filter(
         data =>
-          !this.inputValue ||
-          data.name.toLowerCase().includes(this.inputValue.toLowerCase())
+          !this.page.keywords ||
+          data.name.toLowerCase().includes(this.page.keywords.toLowerCase())
       );
     }
   },
@@ -144,7 +142,8 @@ export default {
       try {
         let params = {
           currentPage: this.page.currentPage,
-          pageSize: this.page.pageSize
+          pageSize: this.page.pageSize,
+          keywords:this.page.keywords
         };
         let res = await getPageData(params);
         this.pageData = res.list;
@@ -188,17 +187,12 @@ export default {
         this.$refs.searchInput.$refs.input.focus();
       });
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        console.log(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
     clearVal() {
-      this.inputVisible = false;
-      this.inputValue = "";
+      if (this.page.keywords == "") {
+        this.inputVisible = false;
+      } else {
+        this.inputVisible = true;
+      }
     }
   }
 };

@@ -4,12 +4,15 @@ let pageData = require('../sql/pageData')
 let id = 11
 module.exports = function (app) {
   app.get('/PageData', (req, res, next) => {
-    let { currentPage, pageSize } = req.query
-    let list = pageData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let { currentPage, pageSize,keywords} = req.query
+    let currentTotal=pageData.filter((data)=>{
+      return !keywords ||data.name.toLowerCase().includes(keywords.toLowerCase())
+    });
+    let list =currentTotal.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
-      total: pageData.length
+      total: currentTotal.length
     })
   })
   app.post('/addPageData', jsonParser, (req, res, next) => {

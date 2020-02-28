@@ -22,8 +22,7 @@
           v-model="page.keywords"
           class="searchInput"
           size="medium"
-          placeholder="请输入路由名称"
-          @keyup.enter.native="handleInputConfirm"
+          placeholder="请输入服务名称"
           @blur="clearVal"
         ></el-input>
         <el-button

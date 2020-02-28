@@ -51,9 +51,6 @@ export default {
     },
     methods: {
       searchData(){
-        if(this.page.keywords === ''){
-          return 
-        }
         this.$emit('load')
       },
       clearVal(){

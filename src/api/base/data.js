@@ -1,6 +1,6 @@
 import axios from '@/util/request'
 
-export const getDataList = function(params){
+export const getOriginList = function(params){
   return axios({
     method:'get',
     url:'/datalist',
@@ -8,7 +8,7 @@ export const getDataList = function(params){
   })
 }
 
-export const addData = function(data){
+export const addOrigin = function(data){
   return axios({
     method:'post',
     url:'/addData',
@@ -16,7 +16,7 @@ export const addData = function(data){
   })
 }
 
-export const editData = function(data){
+export const editOrigin = function(data){
   return axios({
     method:'post',
     url:'/editData',
@@ -24,7 +24,7 @@ export const editData = function(data){
   })
 }
 
-export const activeData = function(data){
+export const activeOrigin = function(data){
   return axios({
     method:'post',
     url:'/activeData',
@@ -32,7 +32,7 @@ export const activeData = function(data){
   })
 }
 
-export const deleteData = function(data){
+export const deleteOrigin = function(data){
   return axios({
     method:'post',
     url:'/deleteData',

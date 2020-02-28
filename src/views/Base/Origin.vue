@@ -120,7 +120,7 @@
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
 
-import { getDataList,activeData,deleteData } from '@/api/base/data'
+import { getOriginList,activeOrigin,deleteOrigin } from '@/api/base/data'
 export default {
   name:'Origin',
   components:{
@@ -143,7 +143,7 @@ export default {
           currentPage:this.page.currentPage,
           pageSize:this.page.pageSize,
         }
-        let res = await getDataList(params)
+        let res = await getOriginList(params)
         this.tableData = res.list
         this.page.total = res.total
 
@@ -168,7 +168,7 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           callback: action => {
-            this.delete(this.tableData,this.activeData,deleteData)
+            this.delete(this.tableData,this.activeData,deleteOrigin)
           }
         });
       
@@ -179,14 +179,14 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           callback: action => {
-            this.delete(this.tableData,[row],deleteData)
+            this.delete(this.tableData,[row],deleteOrigin)
           }
         });
       
     },
     async activeClick(){
       try{
-        let res = await activeData(this.activeData)
+        let res = await activeOrigin(this.activeData)
         this.$message.success('生效成功')
       }catch(err){
         throw err

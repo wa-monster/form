@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {addData, editData} from '@/api/base/data'
+import {addOrigin, editOrigin} from '@/api/base/data'
 export default {
     name:'DataDialog',
     data() {
@@ -156,10 +156,10 @@ export default {
       async addOrEdit(){
         try{
           if(this.titleName === '修改'){
-            await editData(this.formData)
+            await editOrigin(this.formData)
             this.$message.success('修改成功')
           }else{
-            await addData(this.formData)
+            await addOrigin(this.formData)
             this.$message.success('添加成功')
           }
           this.clearForm()

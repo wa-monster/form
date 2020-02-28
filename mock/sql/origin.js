@@ -32,7 +32,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d5',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -40,7 +40,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d6',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -48,7 +48,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d7',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -56,7 +56,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d8',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -64,7 +64,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d9',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -72,7 +72,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d10',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -80,7 +80,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d11',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -88,7 +88,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d12',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -96,7 +96,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d13',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',
@@ -104,7 +104,7 @@ exports.datalist = [
     type:'oracle',
   },
   {
-    id:'d4',
+    id:'d14',
     name:'工商外网4',
     description:'工商外网数据库',
     sign:'gs',

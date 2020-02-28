@@ -39,7 +39,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="表明"
+        label="表名"
       >
         <template slot-scope="scope">
           {{ scope.row.name }}

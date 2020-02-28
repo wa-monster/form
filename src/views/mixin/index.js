@@ -4,9 +4,10 @@ export default {
       page:{
         currentPage: 1,
         total:10,
-        pageSize:10
+        pageSize:10,
+        keywords:''
       }
-
+      
     }
   },
   watch:{
@@ -34,6 +35,7 @@ export default {
           params.push(item.id);
         }
         let res = await fn(params);
+        this.$message.success('删除成功')
         if (data.length === 1) {
           if (this.page.currentPage > 1) {
             this.page.currentPage--;

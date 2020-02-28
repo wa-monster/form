@@ -1,28 +1,247 @@
 <template>
-  <div>
+  <div class="menuView">
+    <div class="myform-header">
+      <div class="btn-group">
+        <el-button
+          type="primary"
+          size="medium"
+          @click="addMenu"
+        >
+          添加
+        </el-button>
+        <el-button
+          type="primary"
+          size="medium"
+        >
+          添加子菜单
+        </el-button>
+        <el-button
+          type="danger"
+          size="medium"
+        >
+          删除
+        </el-button>
+        <el-button
+          size="medium"
+          @click="handleSubmit"
+        >
+          保存
+        </el-button>
+      </div>
+    </div>
+    <div class="myform-body">
+      <div class="myform-body-left">
+        <el-input
+          v-model="keywords"
+          placeholder="请输入内容"
+          prefix-icon="el-icon-search"
+        ></el-input>
+        <div class="tree-box">
+          <el-scrollbar class="page_scrollbar">
+            <el-tree
+              :data="menuData"
+              :props="defaultProps"
+              node-key="id"
+              :default-expanded-keys="[1]"
+              @node-click="handleNodeClick"
+            ></el-tree>
+          </el-scrollbar>
+        </div>
+      </div>
+      <div class="myform-body-right">
+        <el-form
+          ref="menuForm"
+          label-position="left"
+          label-width="80px"
+          :model="formData"
+          :rules="rules"
+          size="medium"
+        >
+          <el-form-item
+            label="名称"
+            prop="name"
+          >
+            <el-input v-model="formData.name"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="描述"
+            prop="des"
+          >
+            <el-input v-model="formData.des"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="地址"
+            prop="address"
+          >
+            <el-input v-model="formData.address"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="类型"
+            prop="type"
+          >
+            <el-radio-group
+              v-model="formData.type"
+            >
+              <el-radio :label="0">
+                菜单
+              </el-radio>
+              <el-radio :label="1">
+                页面
+              </el-radio>
+              <el-radio :label="2">
+                按钮
+              </el-radio>
+              <el-radio :label="3">
+                ajax
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            label="是否可用"
+            prop="disabled"
+          >
+            <el-radio-group
+              v-model="formData.disabled"
+            >
+              <el-radio :label="0">
+                是
+              </el-radio>
+              <el-radio :label="1">
+                否
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            label="是否隐藏"
+            prop="hide"
+          >
+            <el-radio-group v-model="formData.hide">
+              <el-radio :label="0">
+                是
+              </el-radio>
+              <el-radio :label="1">
+                否
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { getMenuData } from "@/api/platform/menu.js";
 export default {
-    name:'Menu',
-    data() {
-        return {
-
-        };
+  name: "Page",
+  components: {},
+  data() {
+    return {
+      keywords: "",
+      menuData: [],
+      defaultProps: {
+        children: "children",
+        label: "name"
+      },
+      formData: {
+        id:"",
+        name: "",
+        des: "",
+        address: "",
+        type: 0,
+        disabled: 0,
+        hide: 1
+      },
+      currentData:null,
+      type:"add",
+      rules:{
+        name:[{required:true,message:"请输入名称",trigger:"blur"}],
+        des:[{required:true,message:"请输入描述",trigger:"blur"}],
+        address:[{required:true,message:"请输入地址",trigger:"blur"}],
+        type:[{required:true,message:"请选择类型",trigger:"change"}],
+        disabled:[{required:true,message:"请选择是否可用",trigger:"change"}],
+        hide:[{required:true,message:"请选择是否隐藏",trigger:"change"}],
+      }
+    };
+  },
+  computed: {},
+  created() {
+    this.load();
+  },
+  mounted() {},
+  methods: {
+    async load() {
+      try {
+        let params = {};
+        let res = await getMenuData(params);
+        this.menuData = res.data;
+      } catch (err) {
+        throw err;
+      }
     },
-    created() {
-
+    addMenu(){
+      this.type='add';
+      this.currentData=null;
+      this.$refs.menuForm.resetFields();
     },
-    mounted() {
-
+    handleNodeClick(data) {
+      this.type='edit';
+      this.currentData=data;
+      for(let key in this.formData){
+        this.formData[key]=this.currentData[key];
+      }
     },
-    methods: {
-
+    handleSubmit(){
+      let canSubmit=true;
+      this.$refs.menuForm.validate((valid)=>{
+        if(!valid){
+          canSubmit=false
+        }
+      })
+      if(canSubmit){
+        if(this.type=="add"){
+          this.$message("添加成功")
+        }else{
+          this.$message("修改成功")
+        }
+      }
     }
+  }
 };
 </script>
 
 <style scoped lang="stylus">
+.menuView {
+  height: 100%;
+}
 
+.menuView .btn-group {
+  margin-bottom: 10px;
+}
+
+.menuView .myform-body {
+  height: calc(100% - 46px);
+  position :relative;
+}
+
+.menuView .myform-footer {
+  text-align: right;
+}
+
+.menuView .myform-body-left {
+  width: 240px;
+  height: 100%;
+  position:absolute;
+}
+
+.menuView .myform-body-left .tree-box {
+  margin-top: 10PX;
+  height: calc(100% - 50px);
+  overflow: auto;
+}
+
+.menuView .myform-body-right {
+  margin-left: 250px;
+  height: 100%;
+}
 </style>

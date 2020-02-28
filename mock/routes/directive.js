@@ -4,8 +4,10 @@ let directiveData = require('../sql/directiveData')
 let id = 11
 module.exports = function (app) {
   app.get('/directiveData', (req, res, next) => {
-    let { currentPage, pageSize } = req.query
-    let list = directiveData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let { currentPage, pageSize,keywords} = req.query
+    let list = directiveData.filter((data)=>{
+      return !keywords ||data.name.toLowerCase().includes(keywords.toLowerCase())
+    }).slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,

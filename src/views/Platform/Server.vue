@@ -16,22 +16,10 @@
         >
           删除
         </el-button>
-        <el-input
-          v-if="inputVisible"
-          ref="searchInput"
-          v-model="page.keywords"
-          class="searchInput"
-          size="medium"
-          placeholder="请输入服务名称"
-          @blur="clearVal"
-        ></el-input>
-        <el-button
-          v-else
-          size="medium"
-          @click="showInput"
-        >
-          查询
-        </el-button>
+        <searchBtn
+          :page="page"
+          @load="load"
+        ></searchBtn>
       </div>
     </div>
     <div class="myform-body">
@@ -100,11 +88,13 @@
 <script>
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/serverDialog.vue";
+import searchBtn from '@/components/little/searchBtn'
 import { getServerData, delServerData } from "@/api/platform/server.js";
 export default {
   name: "Server",
   components: {
-    Dialog
+    Dialog,
+    searchBtn
   },
   mixins: [mixin],
   data() {
@@ -192,7 +182,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.server .searchInput {
+.search_input {
   width: 160px;
   margin-left: 10px;
 }

@@ -6,3 +6,10 @@ export const getMenuData=function(params){
     params
   }) 
 }
+export const addMenuData=function(params){
+  return axios({
+    method:'post',
+    url:'/addMenuData',
+    data:params
+  }) 
+}

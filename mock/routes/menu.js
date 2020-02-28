@@ -34,4 +34,15 @@ module.exports = function (app) {
       code: 0,
     })
   })
+  app.post('/addMenuData',jsonParser, (req, res, next) => {
+    req.body.id=id;
+    req.body.pId=0;
+    id++;
+    let obj=req.body;
+    menuData.push(obj);
+    return res.json({
+      code: 0,
+      message:'添加成功'
+    })
+  })
 }

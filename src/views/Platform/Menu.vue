@@ -39,6 +39,7 @@
         <div class="tree-box">
           <el-scrollbar class="page_scrollbar">
             <el-tree
+              ref="tree"
               :data="menuData"
               :props="defaultProps"
               node-key="id"
@@ -61,7 +62,10 @@
             label="名称"
             prop="name"
           >
-            <el-input v-model="formData.name"></el-input>
+            <el-input
+              ref="nameInput"
+              v-model="formData.name"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="描述"
@@ -131,7 +135,7 @@
 </template>
 
 <script>
-import { getMenuData } from "@/api/platform/menu.js";
+import { getMenuData ,addMenuData} from "@/api/platform/menu.js";
 export default {
   name: "Page",
   components: {},
@@ -145,6 +149,7 @@ export default {
       },
       formData: {
         id:"",
+        pId:"",
         name: "",
         des: "",
         address: "",
@@ -183,6 +188,10 @@ export default {
       this.type='add';
       this.currentData=null;
       this.$refs.menuForm.resetFields();
+      this.$refs.nameInput.focus();
+    },
+    addChild(node){
+
     },
     handleNodeClick(data) {
       this.type='edit';
@@ -191,7 +200,7 @@ export default {
         this.formData[key]=this.currentData[key];
       }
     },
-    handleSubmit(){
+    async handleSubmit(){
       let canSubmit=true;
       this.$refs.menuForm.validate((valid)=>{
         if(!valid){
@@ -200,7 +209,10 @@ export default {
       })
       if(canSubmit){
         if(this.type=="add"){
-          this.$message("添加成功")
+          let res=await addMenuData(this.formData);
+          this.$refs.menuForm.resetFields();
+          this.load();
+          this.$message("添加成功");
         }else{
           this.$message("修改成功")
         }

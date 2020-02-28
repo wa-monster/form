@@ -1,4 +1,3 @@
-import { Debounce } from '@/util/util'
 export default {
   data(){
     return {
@@ -8,19 +7,12 @@ export default {
         pageSize:10,
         keywords:''
       },
-      debounceFn:null,
     }
-  },
-  created(){
-    this.debounceFn=Debounce(this.load, 500)
   },
   watch:{
     'page.currentPage'(){
       this.load()
     },
-    'page.keywords'(){
-      this.debounceFn();
-    }
   },
   methods:{
     sizeChange(size){

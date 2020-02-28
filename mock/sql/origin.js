@@ -74,7 +74,7 @@ exports.datalist = [
   {
     id:'d10',
     name:'工商外网4',
-    description:'工商外网数据库',
+    description:'工商外网数据库我是一个需要进行省略的文字',
     sign:'gs',
     info:'jdbc',
     type:'oracle',

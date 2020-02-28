@@ -46,7 +46,7 @@
         label="描述"
       >
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          <ToolTip :text="scope.row.description"></ToolTip>
         </template>
       </el-table-column>
       <el-table-column
@@ -119,12 +119,14 @@
 <script>
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
+import ToolTip from '@/components/little/tooltip'
 
 import { getOriginList,activeOrigin,deleteOrigin } from '@/api/base/origin'
 export default {
   name:'Origin',
   components:{
-    DataDialog
+    DataDialog,
+    ToolTip
   },
   mixins:[mixin],
   data(){
@@ -164,24 +166,23 @@ export default {
       if(this.activeData.length === 0){
         return 
       }
-      this.$alert(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          callback: action => {
-            this.delete(this.tableData,this.activeData,deleteOrigin)
-          }
-        });
-      
+      this.$confirm(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        this.delete(this.tableData,this.activeData,deleteOrigin)
+      })
     },
     deleteClick(scope){
       let row = scope.row
-      this.$alert('确定要删除本行内容?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          callback: action => {
-            this.delete(this.tableData,[row],deleteOrigin)
-          }
-        });
+      this.$confirm('确定要删除本行内容?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then( ()=>{
+        this.delete(this.tableData,[row],deleteOrigin)
+      })
       
     },
     async activeClick(){

@@ -28,7 +28,6 @@ export default {
       this.page.currentPage = currentPage
     },
     async delete(data, item,fn) {
-      console.log(item)
       try {
         let params;
         if(Array.isArray(item)){
@@ -40,7 +39,11 @@ export default {
           params.push(item.id);
         }
         let res = await fn(params);
-        this.$message.success('删除成功')
+        this.$message({
+          message:'删除成功',
+          type: 'success',
+          duration:'2000'
+        })
         if (data.length === 1) {
           if (this.page.currentPage > 1) {
             this.page.currentPage--;

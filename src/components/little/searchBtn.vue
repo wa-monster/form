@@ -23,7 +23,7 @@
 import {Debounce} from '@/util/util'
 
 export default {
-    name:'',
+    name:'SearchBtn',
     props:{
       page:{
         type:Object,

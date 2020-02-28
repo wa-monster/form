@@ -14,11 +14,27 @@
       >
         删除选中
       </el-button>
-      <el-button
+      <searchBtn
+        :page="page"
+        @load="load"
+      ></searchBtn> 
+      <!-- <el-input
+        v-if="inputVisible"
+        ref="search"
+        v-model="searchKey"
+        class="search_input"
         size="medium"
+        placeholder="请输入数据源"
+        @blur="clearVal"
+      >
+      </el-input>
+      <el-button
+        v-else
+        size="medium"
+        @click="inputShow"
       >
         查询
-      </el-button>
+      </el-button> -->
     </div>
     <el-table
       ref="Table"
@@ -118,13 +134,20 @@
 <script>
 import mixin from '@/views/mixin'
 import {getFormList,deleteFormList} from '@/api/platform/form'
+import searchBtn from '@/components/little/searchBtn'
+
 export default {
   name:'Form',
+  components:{
+    searchBtn
+  },
   mixins:[mixin],
   data(){
     return {
       tableData:[],
       activeData:[],
+      inputVisible:false,
+      searchKey:''
     }
   },
   mounted(){
@@ -171,8 +194,18 @@ export default {
             this.delete(this.tableData,[row],deleteData)
           }
         });
+    },
+    inputShow(){
+      this.inputVisible = true
+      this.$nextTick(()=>{
+        this.$refs.search.focus()
+      })
       
     },
+    clearVal(){
+      this.inputVisible = false
+      this.searchKey = ""
+    }
   }
 }
 </script>
@@ -184,6 +217,11 @@ export default {
   position: relative;
   .form_btn{
     margin-bottom:20px;
+    height: 36px;
   }
+}
+.search_input {
+  width: 160px;
+  margin-left: 10px;
 }
 </style>

@@ -7,16 +7,19 @@ export default {
         total:10,
         pageSize:10,
         keywords:''
-      }
-      
+      },
+      debounceFn:null,
     }
+  },
+  created(){
+    this.debounceFn=Debounce(this.load, 500)
   },
   watch:{
     'page.currentPage'(){
       this.load()
     },
     'page.keywords'(){
-      Debounce(this.load, 500)();
+      this.debounceFn();
     }
   },
   methods:{

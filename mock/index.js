@@ -10,6 +10,7 @@ let directive=require('./routes/directive')
 let router=require('./routes/router')
 let server=require('./routes/server')
 let page=require('./routes/page')
+let menu=require('./routes/menu')
 module.exports = function (app) {
   origin(app);
   auto(app);
@@ -18,4 +19,5 @@ module.exports = function (app) {
   router(app);
   server(app);
   page(app);
+  menu(app);
 }

@@ -5,7 +5,7 @@
         size="medium"
         type="primary"
       >
-        添加
+        生成
       </el-button>
       <el-button
         size="medium"

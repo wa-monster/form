@@ -176,24 +176,24 @@ export default {
       if(this.activeData.length === 0){
         return 
       }
-      this.$alert(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          callback: action => {
-            this.delete(this.tableData,this.activeData,deleteFormList)
-          }
-        });
+      this.$confirm(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        this.delete(this.tableData,this.activeData,deleteFormList)
+      })
       
     },
     deleteClick(scope){
       let row = scope.row
-      this.$alert('确定要删除本行内容?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          callback: action => {
-            this.delete(this.tableData,[row],deleteFormList)
-          }
-        });
+      this.$confirm('确定要删除本行内容?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        this.delete(this.tableData,[row],deleteFormList)
+      })
     },
     inputShow(){
       this.inputVisible = true

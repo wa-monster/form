@@ -23,7 +23,7 @@
 import {Debounce} from '@/util/util'
 
 export default {
-    name:'',
+    name:'SearchBtn',
     props:{
       page:{
         type:Object,
@@ -51,9 +51,6 @@ export default {
     },
     methods: {
       searchData(){
-        if(this.page.keywords === ''){
-          return 
-        }
         this.$emit('load')
       },
       clearVal(){

@@ -99,11 +99,11 @@
         label="操作"
         width="160"
       >
-        <template>
+        <template v-slot="scope">
           <el-button
             size="mini"
             type="danger"
-            @click="deleteClick"
+            @click="deleteClick(scope)"
           >
             删除
           </el-button>
@@ -191,7 +191,7 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           callback: action => {
-            this.delete(this.tableData,[row],deleteData)
+            this.delete(this.tableData,[row],deleteFormList)
           }
         });
     },

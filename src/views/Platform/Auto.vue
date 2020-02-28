@@ -108,7 +108,6 @@ export default {
       tableData:[],
       activeData:[],
       inputVisible:false,
-      searchKey:''
     }
   },
   mounted(){
@@ -120,6 +119,7 @@ export default {
         let params = {
           currentPage:this.page.currentPage,
           pageSize:this.page.pageSize,
+          keywords:this.page.keywords,
         }
         let res = await getAutoList(params)
         this.tableData = res.list

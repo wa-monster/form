@@ -80,6 +80,7 @@
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button
         type="primary"
+        :loading="loading"
         @click="submit"
       >确 定</el-button>
     </span>
@@ -95,6 +96,7 @@ export default {
         dialogVisible: false,
         radio:'',
         titleName:'添加',
+        loading:false,
         formData:{
           name:'',
           description:'',
@@ -155,6 +157,7 @@ export default {
       },
       async addOrEdit(){
         try{
+          this.loading = true
           if(this.titleName === '修改'){
             await editOrigin(this.formData)
             this.$message.success('修改成功')
@@ -163,12 +166,13 @@ export default {
             this.$message.success('添加成功')
           }
           this.clearForm()
+          this.loading = false
           this.dialogVisible = false
           this.$emit('onload')
         }catch(err){
           throw err
         }
-      }
+      },
     }
 };
 </script>

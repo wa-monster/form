@@ -2,32 +2,32 @@
   <div
     class="menu_box"
   >
-    <el-scrollbar class="page_scrollbar">
-      <el-input
-        v-model="serachVal"
-        class="search_input"
-        placeholder="输入文字并搜索"
-        @keypress.enter.native="searchMenu"
-      >
-        <i
-          slot="prefix"
-          class="el-input__icon el-icon-search"
-          @click="searchMenu"
-        ></i>
-      </el-input>
-      <el-menu
-        :default-active="currentPath"
-        active-text-color="#333"
-        @select="menuSelect"
-      >
-        <MenuItem
-          v-for="(item, index) in menuList"
-          :key="index"
-          :item="item"
-          :base-path="item.path"
-        ></MenuItem>  
-      </el-menu>
-    </el-scrollbar>
+    <!-- <el-scrollbar class="page_scrollbar"> -->
+    <el-input
+      v-model="serachVal"
+      class="search_input"
+      placeholder="输入文字并搜索"
+      @keypress.enter.native="searchMenu"
+    >
+      <i
+        slot="prefix"
+        class="el-input__icon el-icon-search"
+        @click="searchMenu"
+      ></i>
+    </el-input>
+    <el-menu
+      :default-active="currentPath"
+      active-text-color="#333"
+      @select="menuSelect"
+    >
+      <MenuItem
+        v-for="(item, index) in menuList"
+        :key="index"
+        :item="item"
+        :base-path="item.path"
+      ></MenuItem>  
+    </el-menu>
+    <!-- </el-scrollbar> -->
   </div>
 </template>
 
@@ -88,12 +88,14 @@ export default {
 
 <style lang="stylus" scoped>
 .menu_box{
-  width:200px;
+  width:217px;
   float:left;
   height:100%;
   background-color:#f2f2f2;
-  overflow:hidden;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
+
 .search_input{
   margin 10px;
   width: 180px;

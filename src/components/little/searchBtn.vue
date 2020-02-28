@@ -2,7 +2,7 @@
   <el-input
     v-if="inputVisible"
     ref="search"
-    v-model="page.searchKey"
+    v-model="page.keywords"
     size="medium"
     class="search_input"
     placeholder="请输入数据源"
@@ -37,7 +37,7 @@ export default {
         };
     },
     watch:{
-      'page.searchKey':{
+      'page.keywords':{
         handler(){
           this.deBounce()
         }
@@ -51,15 +51,15 @@ export default {
     },
     methods: {
       searchData(){
-        if(this.page.searchKey === ''){
+        if(this.page.keywords === ''){
           return 
         }
         this.$emit('load')
       },
       clearVal(){
-        if(this.page.searchKey === ''){
+        if(this.page.keywords === ''){
           this.inputVisible = false
-          this.searchKey = ""
+          this.keywords = ""
         }
       },
       inputShow(){

@@ -4,12 +4,15 @@ let serverData = require('../sql/serverData')
 let id = 11
 module.exports = function (app) {
   app.get('/serverData', (req, res, next) => {
-    let { currentPage, pageSize } = req.query
-    let list = serverData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let { currentPage, pageSize,keywords} = req.query
+    let currentTotal=serverData.filter((data)=>{
+      return !keywords ||data.name.toLowerCase().includes(keywords.toLowerCase())
+    });
+    let list =currentTotal.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
-      total: serverData.length
+      total: currentTotal.length
     })
   })
   app.post('/addServerData', jsonParser, (req, res, next) => {

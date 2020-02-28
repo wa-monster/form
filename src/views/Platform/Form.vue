@@ -136,6 +136,7 @@ export default {
         let params = {
           currentPage:this.page.currentPage,
           pageSize:this.page.pageSize,
+          keywords:this.page.keywords,
         }
         let res = await getFormList(params)
         this.tableData = res.list

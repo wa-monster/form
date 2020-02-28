@@ -120,7 +120,7 @@
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
 
-import { getOriginList,activeOrigin,deleteOrigin } from '@/api/base/data'
+import { getOriginList,activeOrigin,deleteOrigin } from '@/api/base/origin'
 export default {
   name:'Origin',
   components:{

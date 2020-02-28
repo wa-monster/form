@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {addOrigin, editOrigin} from '@/api/base/data'
+import {addOrigin, editOrigin} from '@/api/base/origin'
 export default {
     name:'DataDialog',
     data() {

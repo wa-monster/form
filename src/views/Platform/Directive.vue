@@ -19,11 +19,10 @@
         <el-input
           v-if="inputVisible"
           ref="searchInput"
-          v-model="inputValue"
+          v-model="page.keywords"
           class="searchInput"
           size="medium"
           placeholder="请输入指令名称"
-          @keyup.enter.native="handleInputConfirm"
           @blur="clearVal"
         ></el-input>
         <el-button
@@ -37,7 +36,7 @@
     </div>
     <div class="myform-body">
       <el-table
-        :data="filterData"
+        :data="instructionData"
         border
         style="width: 100%"
         height="500"
@@ -115,16 +114,18 @@
 <script>
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/instructionDialog.vue";
-import { getDirectiveData, delDirectiveData } from "@/api/platform/directive.js";
+import {
+  getDirectiveData,
+  delDirectiveData
+} from "@/api/platform/directive.js";
 export default {
   name: "Directive",
   components: {
-    Dialog,
+    Dialog
   },
   mixins: [mixin],
   data() {
     return {
-      inputValue: "",
       inputVisible: false,
       currentData: [],
       instructionForm: {
@@ -144,8 +145,8 @@ export default {
     filterData() {
       return this.instructionData.filter(
         data =>
-          !this.inputValue ||
-          data.name.toLowerCase().includes(this.inputValue.toLowerCase())
+          !this.page.keywords ||
+          data.name.toLowerCase().includes(this.page.keywords.toLowerCase())
       );
     }
   },
@@ -157,7 +158,8 @@ export default {
       try {
         let params = {
           currentPage: this.page.currentPage,
-          pageSize: this.page.pageSize
+          pageSize: this.page.pageSize,
+          keywords: this.page.keywords
         };
         let res = await getDirectiveData(params);
         this.instructionData = res.list;
@@ -166,8 +168,8 @@ export default {
         throw err;
       }
     },
-    dialogShow(){
-      this.$refs['dialog'].show();
+    dialogShow() {
+      this.$refs["dialog"].show();
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -187,7 +189,7 @@ export default {
     },
     remove() {
       if (this.currentData && this.currentData.length !== 0) {
-        this.delete(this.instructionData,this.currentData,delDirectiveData);
+        this.delete(this.instructionData, this.currentData, delDirectiveData);
         this.$message({ message: "删除成功", type: "success" });
         this.currentData = [];
       } else {
@@ -195,10 +197,10 @@ export default {
       }
     },
     handleDelete(data, item) {
-      this.delete(data,item,delDirectiveData);
+      this.delete(data, item, delDirectiveData);
     },
     edit(item) {
-      this.$refs['dialog'].show(this.depClone(item));
+      this.$refs["dialog"].show(this.depClone(item));
     },
     showInput() {
       this.inputVisible = true;
@@ -206,17 +208,12 @@ export default {
         this.$refs.searchInput.$refs.input.focus();
       });
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        console.log(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
     clearVal() {
-      this.inputVisible = false;
-      this.inputValue = "";
+      if (this.page.keywords == "") {
+        this.inputVisible = false;
+      } else {
+        this.inputVisible = true;
+      }
     }
   }
 };

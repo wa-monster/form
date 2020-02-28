@@ -5,13 +5,14 @@ let id = 11
 module.exports = function (app) {
   app.get('/directiveData', (req, res, next) => {
     let { currentPage, pageSize,keywords} = req.query
-    let list = directiveData.filter((data)=>{
+    let currentTotal=directiveData.filter((data)=>{
       return !keywords ||data.name.toLowerCase().includes(keywords.toLowerCase())
-    }).slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    });
+    let list =currentTotal.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
-      total: directiveData.length
+      total: currentTotal.length
     })
   })
   app.post('/addDirectiveData', jsonParser, (req, res, next) => {

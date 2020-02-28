@@ -19,11 +19,10 @@
         <el-input
           v-if="inputVisible"
           ref="searchInput"
-          v-model="inputValue"
+          v-model="page.keywords"
           class="searchInput"
           size="medium"
-          placeholder="请输入路由名称"
-          @keyup.enter.native="handleInputConfirm"
+          placeholder="请输入服务名称"
           @blur="clearVal"
         ></el-input>
         <el-button
@@ -37,7 +36,7 @@
     </div>
     <div class="myform-body">
       <el-table
-        :data="filterData"
+        :data="serverData"
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
@@ -111,7 +110,6 @@ export default {
   data() {
     return {
       currentData: [],
-      inputValue: "",
       currentPage: 1,
       inputVisible: false,
       serverData: []
@@ -121,8 +119,8 @@ export default {
     filterData() {
       return this.serverData.filter(
         data =>
-          !this.inputValue ||
-          data.name.toLowerCase().includes(this.inputValue.toLowerCase())
+          !this.page.keywords ||
+          data.name.toLowerCase().includes(this.page.keywords.toLowerCase())
       );
     }
   },
@@ -135,7 +133,8 @@ export default {
       try {
         let params = {
           currentPage: this.page.currentPage,
-          pageSize: this.page.pageSize
+          pageSize: this.page.pageSize,
+          keywords:this.page.keywords
         };
         let res = await getServerData(params);
         this.serverData = res.list;
@@ -177,23 +176,12 @@ export default {
         this.$refs.searchInput.$refs.input.focus();
       });
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        console.log(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
     clearVal() {
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      if (this.page.keywords == "") {
+        this.inputVisible = false;
+      } else {
+        this.inputVisible = true;
+      }
     }
   }
 };

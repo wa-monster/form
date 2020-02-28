@@ -1,3 +1,4 @@
+import { Debounce } from '@/util/util'
 export default {
   data(){
     return {
@@ -13,6 +14,9 @@ export default {
   watch:{
     'page.currentPage'(){
       this.load()
+    },
+    'page.keywords'(){
+      Debounce(this.load, 500)();
     }
   },
   methods:{

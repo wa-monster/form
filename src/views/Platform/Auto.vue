@@ -13,11 +13,28 @@
       >
         重置
       </el-button>
-      <el-button
+      <searchBtn
+        :page="page"
+        @load="load"
+      ></searchBtn> 
+      <!-- <el-input
+        v-if="inputVisible"
+        ref="search"
+        v-model="page.searchKey"
         size="medium"
+        class="search_input"
+        placeholder="请输入数据源"
+        @keypress.enter.native="searchData"
+        @blur="clearVal"
+      >
+      </el-input>
+      <el-button
+        v-else
+        size="medium"
+        @click="inputShow"
       >
         查询
-      </el-button>
+      </el-button> -->
     </div>
     <el-table
       ref="Table"
@@ -78,13 +95,19 @@
 <script>
 import mixin from '@/views/mixin'
 import {getAutoList} from '@/api/platform/auto'
+import searchBtn from '@/components/little/searchBtn'
+
 export default {
   name:'Auto',
+  components:{
+    searchBtn
+  },
   mixins:[mixin],
   data(){
     return {
       tableData:[],
       activeData:[],
+      inputVisible:false,
     }
   },
   mounted(){
@@ -96,6 +119,7 @@ export default {
         let params = {
           currentPage:this.page.currentPage,
           pageSize:this.page.pageSize,
+          keywords:this.page.keywords,
         }
         let res = await getAutoList(params)
         this.tableData = res.list
@@ -105,6 +129,23 @@ export default {
         throw err
       }
     },
+    // inputShow(){
+    //   this.inputVisible = true
+    //   this.$nextTick(()=>{
+    //     this.$refs.search.focus()
+    //   })
+      
+    // },
+    // searchData(){
+    //   if(this.page.searchKey === ''){
+    //     return 
+    //   }
+    //   this.load()
+    // },
+    // clearVal(){
+    //   this.inputVisible = false
+    //   this.searchKey = ""
+    // }
   }
 }
 </script>
@@ -116,6 +157,11 @@ export default {
   position: relative;
   .auto_btn{
     margin-bottom:20px;
+    height: 36px;
   }
+}
+.search_input {
+  width: 160px;
+  margin-left: 10px;
 }
 </style>

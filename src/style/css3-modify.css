@@ -37,7 +37,7 @@
 /* 分页 */
 .page{
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   right: 10px;
 }
 
@@ -53,4 +53,20 @@
 }
 .el-scrollbar__wrap{
   overflow-x:hidden;
+}
+
+/*滚动条*/
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+::-webkit-scrollbar, ::-webkit-scrollbar-track-piece{
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(144,146,152,.3);
+}
+::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {
+    background-color: transparent;
 }

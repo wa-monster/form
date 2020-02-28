@@ -31,6 +31,7 @@ export default {
       this.page.currentPage = currentPage
     },
     async delete(data, item,fn) {
+      console.log(item)
       try {
         let params;
         if(Array.isArray(item)){

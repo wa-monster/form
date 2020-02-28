@@ -14,6 +14,7 @@ export const Debounce = (fn, t) => {
     if (timer) {
       clearTimeout(timer)
     }
+    console.log('1')
     timer = setTimeout(() => {
       timer = null
       fn.apply(this, args)

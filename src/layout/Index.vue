@@ -7,7 +7,7 @@
       
       <div
         class="box"
-        :style="(!openMenu||!openTop)? {width: '100%'}:{width:'calc(100% - 200px)'}"
+        :style="(!openMenu||!openTop)? {width: '100%'}:{width:'calc(100% - 227px)'}"
       >
         <div class="box_main">
           <router-view />

@@ -4,12 +4,32 @@ let { formList } = require('../sql/form')
 module.exports = function (app) {
   //获取列表
   app.get('/getFormList', (req, res, next) => {
-    let { currentPage, pageSize } = req.query
-    let list = formList.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let { currentPage, pageSize, keywords } = req.query
+    let formListClone 
+    if(keywords){
+      formListClone = formList.filter(item=>{
+        return item.name.includes(keywords)
+      })
+    }else{
+      formListClone = [...formList] 
+    }
+    let list = formListClone.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
       total: formList.length
+    })
+  })
+  app.post('/deleteFormList',jsonParser,(req, res, next)=>{
+    let body = req.body
+    formList = formList.filter(item=>{
+      let isId = body.some(id=>{
+        return id === item.id
+      })
+      return !isId
+    })
+    return res.json({
+      code: 0,
     })
   })
 }

@@ -5,7 +5,7 @@
         <el-button
           type="primary"
           size="medium"
-          @click="addDialogVisible=true"
+          @click="dialogShow"
         >
           添加
         </el-button>
@@ -85,62 +85,36 @@
     </div>
     <div class="myform-footer">
       <el-pagination
-        :current-page="currentPage"
-        :page-sizes="[5,10,15,20]"
-        :page-size="2"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="10"
+        :total="page.total"
         :background="true"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
       ></el-pagination>
     </div>
-    <addDialog
-      :visible="addDialogVisible"
-      :form-data="serverForm"
-      type="add"
-      @changeSate="closeDiglog"
-    ></addDialog>
-    <editDialog
-      :visible="editDialogVisible"
-      :form-data="currentData[0]"
-      type="edit"
-      @changeSate="closeDiglog"
-    ></editDialog>
+    <Dialog ref="dialog"></Dialog>
   </div>
 </template>
 
 <script>
-import addDialog from "@/components/dialog/serverDialog.vue";
-import editDialog from "@/components/dialog/serverDialog.vue";
+import mixin from "@/views/mixin";
+import Dialog from "@/components/dialog/serverDialog.vue";
+import { getServerData, delServerData } from "@/api/platform/server.js";
 export default {
   name: "Server",
   components: {
-    addDialog,
-    editDialog
+    Dialog
   },
+  mixins: [mixin],
   data() {
     return {
-      addDialogVisible: false,
-      editDialogVisible: false,
       currentData: [],
       inputValue: "",
       currentPage: 1,
       inputVisible: false,
-      serverForm: {
-        name: "",
-        directives: [
-          { directiveName: "", name: "" },
-          { directiveName: "", name: "" }
-        ]
-      },
-      serverData: [
-        {
-          id: 0,
-          name: "新增企业",
-          directives: [{ commond: "", param: [] }]
-        }
-      ]
+      serverData: []
     };
   },
   computed: {
@@ -152,19 +126,33 @@ export default {
       );
     }
   },
-  created() {},
+  created() {
+    this.load();
+  },
   mounted() {},
   methods: {
+    async load() {
+      try {
+        let params = {
+          currentPage: this.page.currentPage,
+          pageSize: this.page.pageSize
+        };
+        let res = await getServerData(params);
+        this.serverData = res.list;
+        this.page.total = res.total;
+      } catch (err) {
+        throw err;
+      }
+    },
     formatter(row) {
       return JSON.stringify(row.directives);
     },
+    dialogShow() {
+      this.$refs["dialog"].show();
+    },
     remove() {
       if (this.currentData && this.currentData.length !== 0) {
-        this.currentData.forEach(item => {
-          this.serverData = this.serverData.filter(i => {
-            return item.id !== i.id;
-          });
-        });
+        this.delete(this.serverData,this.currentData,delServerData);
         this.$message({ message: "删除成功", type: "success" });
         this.currentData = [];
       } else {
@@ -172,27 +160,10 @@ export default {
       }
     },
     handleDelete(item) {
-      this.routeData = this.routeData.filter(i => {
-        return item.id !== i.id;
-      });
+      this.delete(this.serverData,item,delServerData);
     },
-    edit() {
-      if (this.currentData && this.currentData.length !== 0) {
-        if (this.currentData.length > 1) {
-          this.$message("只能选择一条数据");
-        } else {
-          this.editDialogVisible = true;
-        }
-      } else {
-        this.$message("请先选择一条数据");
-      }
-    },
-    closeDiglog(state, type) {
-      if (type == "add") {
-        this.addDialogVisible = state;
-      } else {
-        this.editDialogVisible = state;
-      }
+    edit(item) {
+      this.$refs['dialog'].show(this.depClone(item));
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -237,7 +208,12 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
-
+.server .myform-footer {
+  text-align: right;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
+}
 .server .myform-footer {
   text-align: right;
 }

@@ -11,7 +11,7 @@
       label-position="left"
       :label-width="formLabelWidth"
       size="mini"
-      :rules="directiveFormRule"
+      :rules="ServerFormRule"
       class="sec-form"
     >
       <el-form-item
@@ -25,7 +25,6 @@
       </el-form-item>
       <el-form-item label="参数描述">
         <i
-          v-if="type=='add'"
           class="el-icon-plus addRow"
           @click="addRow"
         ></i>
@@ -48,17 +47,16 @@
               <el-select
                 v-model="item.directiveName"
                 placeholder="请选择"
-                class="directive-select"
+                class="Server-select"
               >
                 <el-option
-                  v-for="i in directives"
+                  v-for="i in Servers"
                   :key="i.value"
                   :label="i.label"
                   :value="i.value"
                 ></el-option>
               </el-select>
               <i
-                v-if="type=='add'"
                 class="el-icon-minus removeRow"
                 @click="removeRow(item)"
               ></i>
@@ -96,7 +94,7 @@
   </el-dialog>
 </template>
 <script>
-const directives = [
+const Servers = [
   {
     value: "v-if",
     label: "v-if"
@@ -110,52 +108,55 @@ const directives = [
     label: "v-show"
   }
 ];
+import { addServerData, editServerData } from "@/api/platform/server";
 export default {
-  name: "DirectiveDiaglog",
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "add"
-    },
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    formData: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {};
-      }
-    }
-  },
+  name: "ServerDiaglog",
+  props: {},
   data() {
     return {
       formLabelWidth: "80px",
-      directives: directives,
-      directiveFormRule: {
+      Servers: Servers,
+      ServerFormRule: {
         name: [{ required: true, message: "服务名称不能为空", trigger: "blur" }]
       },
-      childFormRule: {
+      childFormRule: {},
+      formData: {
+        name: "",
+        directives: [
+          { directiveName: "", name: "" },
+          { directiveName: "", name: "" }
+        ]
       },
-      id: 1
+      visible: false,
+      type: "add",
+      title: "增加"
     };
   },
   methods: {
+    show(item) {
+      if (item) {
+        for (let key in item) {
+          this.formData[key] = item[key];
+        }
+        console.log(this.formData);
+        this.title = "修改";
+        this.type = "edit";
+      } else {
+        this.title = "添加";
+        this.type = "add";
+      }
+      this.visible = true;
+    },
     addRow() {
-      let obj={};
-      this.$set(obj,"directiveName","");
-      this.$set(obj,"name","");
-      this.$parent.serverForm.directives.push(obj);
+      let obj = {};
+      this.$set(obj, "directiveName", "");
+      this.$set(obj, "name", "");
+      this.formData.directives.push(obj);
     },
     removeRow(item) {
-      let index = this.$parent.serverForm.directives.indexOf(item);
+      let index = this.formData.directives.indexOf(item);
       if (index !== -1) {
-        this.$parent.serverForm.directives.splice(index, 1);
+        this.formData.directives.splice(index, 1);
       }
     },
     depClone(data) {
@@ -168,10 +169,20 @@ export default {
           item.resetFields();
         });
       }
-      let state = false;
-      this.$emit("changeSate", state, this.type);
+      for (let key in this.formData) {
+        if (key == "directives") {
+          this.formData[key].forEach(item => {
+            for (let i in item) {
+              item[i] = "";
+            }
+          });
+        } else {
+          this.formData[key] = "";
+        }
+      }
+      this.visible = false;
     },
-    handleSubmit() {
+    async handleSubmit() {
       let canSubmit = true;
       this.$refs["formData"].validate(valid => {
         if (valid) {
@@ -183,35 +194,25 @@ export default {
               }
             });
           }
-        }else{
-          canSubmit=false
         }
       });
       if (canSubmit) {
         if (this.type == "add") {
-          this.$parent.serverForm.id = this.id;
-          this.$parent.serverData.push(this.depClone(this.formData));
-          this.id++;
+          let res = await addServerData(this.formData);
+          this.$parent.load();
           this.$message({
             message: "添加成功",
             type: "success"
           });
           this.resetForm();
         } else {
-          this.$parent.directiveData.forEach(item => {
-            if (item.id == this.formData.id) {
-              for (let key in item) {
-                if (key !== "id") {
-                  item[key] = this.formData[key];
-                }
-              }
-            }
-          });
+          let res = await editServerData(this.formData);
+          this.$parent.load();
           this.$message({
             message: "修改成功",
             type: "success"
           });
-          this.$parent.editDialogVisible = false;
+          this.resetForm();
         }
       }
     }
@@ -229,7 +230,7 @@ export default {
   margin-left: 8px;
   cursor: pointer;
 }
-.directive-select {
+.Server-select {
   width: calc(100% - 22px);
 }
 </style>

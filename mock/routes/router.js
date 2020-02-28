@@ -4,12 +4,15 @@ let routerData = require('../sql/routerData')
 let id = 11
 module.exports = function (app) {
   app.get('/routerData', (req, res, next) => {
-    let { currentPage, pageSize } = req.query
-    let list = routerData.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
+    let { currentPage, pageSize,keywords} = req.query
+    let currentTotal=routerData.filter((data)=>{
+      return !keywords ||data.name.toLowerCase().includes(keywords.toLowerCase())
+    });
+    let list =currentTotal.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
     return res.json({
       list,
       code: 0,
-      total: routerData.length
+      total: currentTotal.length
     })
   })
   app.post('/addRouterData', jsonParser, (req, res, next) => {

@@ -19,11 +19,10 @@
         <el-input
           v-if="inputVisible"
           ref="searchInput"
-          v-model="inputValue"
+          v-model="page.keywords"
           class="searchInput"
           size="medium"
           placeholder="请输入路由名称"
-          @keyup.enter.native="handleInputConfirm"
           @blur="clearVal"
         ></el-input>
         <el-button
@@ -37,7 +36,7 @@
     </div>
     <div class="myform-body">
       <el-table
-        :data="filterData"
+        :data="routeData"
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
@@ -124,7 +123,6 @@ export default {
   data() {
     return {
       currentData: [],
-      inputValue: "",
       currentPage: 1,
       inputVisible: false,
       routeData: []
@@ -134,8 +132,8 @@ export default {
     filterData() {
       return this.routeData.filter(
         data =>
-          !this.inputValue ||
-          data.name.toLowerCase().includes(this.inputValue.toLowerCase())
+          !this.page.keywords ||
+          data.name.toLowerCase().includes(this.page.keywords.toLowerCase())
       );
     }
   },
@@ -148,7 +146,8 @@ export default {
       try {
         let params = {
           currentPage: this.page.currentPage,
-          pageSize: this.page.pageSize
+          pageSize: this.page.pageSize,
+          keywords:this.page.keywords
         };
         let res = await getRouterData(params);
         this.routeData = res.list;
@@ -187,17 +186,12 @@ export default {
         this.$refs.searchInput.$refs.input.focus();
       });
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        console.log(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
     clearVal() {
-      this.inputVisible = false;
-      this.inputValue = "";
+      if (this.page.keywords == "") {
+        this.inputVisible = false;
+      } else {
+        this.inputVisible = true;
+      }
     }
   }
 };

@@ -12,12 +12,14 @@
         <el-button
           type="primary"
           size="medium"
+          @click="addChild(currentData)"
         >
           添加子菜单
         </el-button>
         <el-button
           type="danger"
           size="medium"
+          @click="remove(currentData)"
         >
           删除
         </el-button>
@@ -39,10 +41,12 @@
         <div class="tree-box">
           <el-scrollbar class="page_scrollbar">
             <el-tree
+              ref="tree"
               :data="menuData"
               :props="defaultProps"
               node-key="id"
               :default-expanded-keys="[1]"
+              :highlight-current="true"
               @node-click="handleNodeClick"
             ></el-tree>
           </el-scrollbar>
@@ -61,7 +65,10 @@
             label="名称"
             prop="name"
           >
-            <el-input v-model="formData.name"></el-input>
+            <el-input
+              ref="nameInput"
+              v-model="formData.name"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="描述"
@@ -79,9 +86,7 @@
             label="类型"
             prop="type"
           >
-            <el-radio-group
-              v-model="formData.type"
-            >
+            <el-radio-group v-model="formData.type">
               <el-radio :label="0">
                 菜单
               </el-radio>
@@ -100,9 +105,7 @@
             label="是否可用"
             prop="disabled"
           >
-            <el-radio-group
-              v-model="formData.disabled"
-            >
+            <el-radio-group v-model="formData.disabled">
               <el-radio :label="0">
                 是
               </el-radio>
@@ -131,7 +134,14 @@
 </template>
 
 <script>
-import { getMenuData } from "@/api/platform/menu.js";
+import {
+  getMenuData,
+  addMenuData,
+  addMenuChildData,
+  editMenuData,
+  delMenuData
+} from "@/api/platform/menu.js";
+import { Loading } from "element-ui";
 export default {
   name: "Page",
   components: {},
@@ -144,7 +154,8 @@ export default {
         label: "name"
       },
       formData: {
-        id:"",
+        id: "",
+        pId: "",
         name: "",
         des: "",
         address: "",
@@ -152,15 +163,17 @@ export default {
         disabled: 0,
         hide: 1
       },
-      currentData:null,
-      type:"add",
-      rules:{
-        name:[{required:true,message:"请输入名称",trigger:"blur"}],
-        des:[{required:true,message:"请输入描述",trigger:"blur"}],
-        address:[{required:true,message:"请输入地址",trigger:"blur"}],
-        type:[{required:true,message:"请选择类型",trigger:"change"}],
-        disabled:[{required:true,message:"请选择是否可用",trigger:"change"}],
-        hide:[{required:true,message:"请选择是否隐藏",trigger:"change"}],
+      currentData: null,
+      type: "add",
+      rules: {
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        des: [{ required: true, message: "请输入描述", trigger: "blur" }],
+        address: [{ required: true, message: "请输入地址", trigger: "blur" }],
+        type: [{ required: true, message: "请选择类型", trigger: "change" }],
+        disabled: [
+          { required: true, message: "请选择是否可用", trigger: "change" }
+        ],
+        hide: [{ required: true, message: "请选择是否隐藏", trigger: "change" }]
       }
     };
   },
@@ -173,38 +186,75 @@ export default {
     async load() {
       try {
         let params = {};
+        let loadingInstance = Loading.service({
+          target: ".menuView",
+        });
         let res = await getMenuData(params);
+        loadingInstance.close();
         this.menuData = res.data;
       } catch (err) {
         throw err;
       }
     },
-    addMenu(){
-      this.type='add';
-      this.currentData=null;
+    addMenu() {
+      this.type = "add";
+      this.currentData = null;
       this.$refs.menuForm.resetFields();
+      this.$refs.nameInput.focus();
+    },
+    addChild(node) {
+      if (!node) {
+        this.$message("请先选择一个菜单");
+        return;
+      }
+      this.type = "add";
+      this.$refs.menuForm.resetFields();
+      this.$refs.nameInput.focus();
+      this.formData.pId = node.id;
     },
     handleNodeClick(data) {
-      this.type='edit';
-      this.currentData=data;
-      for(let key in this.formData){
-        this.formData[key]=this.currentData[key];
+      this.type = "edit";
+      this.$refs.menuForm.resetFields();
+      this.currentData = data;
+      for (let key in this.formData) {
+        this.formData[key] = this.currentData[key];
       }
     },
-    handleSubmit(){
-      let canSubmit=true;
-      this.$refs.menuForm.validate((valid)=>{
-        if(!valid){
-          canSubmit=false
+    async handleSubmit() {
+      let canSubmit = true;
+      this.$refs.menuForm.validate(valid => {
+        if (!valid) {
+          canSubmit = false;
         }
-      })
-      if(canSubmit){
-        if(this.type=="add"){
-          this.$message("添加成功")
-        }else{
-          this.$message("修改成功")
+      });
+      if (canSubmit) {
+        let res;
+        if (this.type == "add") {
+          if (this.formData.pId == "") {
+            res = await addMenuData(this.formData);
+          } else {
+            res = await addMenuChildData(this.formData);
+          }
+          this.$refs.menuForm.resetFields();
+          this.load();
+          this.$message("添加成功");
+        } else {
+          res = await editMenuData(this.formData);
+          this.$refs.menuForm.resetFields();
+          this.load();
+          this.$message("修改成功");
         }
       }
+    },
+    async remove(node){
+      if (!node) {
+        this.$message("请先选择一个菜单");
+        return;
+      }        
+      let res=await delMenuData({id:node.id});
+      this.$refs.menuForm.resetFields();
+      this.load();
+      this.$message("删除成功");
     }
   }
 };
@@ -221,7 +271,7 @@ export default {
 
 .menuView .myform-body {
   height: calc(100% - 46px);
-  position :relative;
+  position: relative;
 }
 
 .menuView .myform-footer {
@@ -231,7 +281,7 @@ export default {
 .menuView .myform-body-left {
   width: 240px;
   height: 100%;
-  position:absolute;
+  position: absolute;
 }
 
 .menuView .myform-body-left .tree-box {

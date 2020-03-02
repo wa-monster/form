@@ -20,6 +20,7 @@
         <el-input
           v-model="formData.name"
           autocomplete="off"
+          placeholder="请输入路由名称"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -29,6 +30,7 @@
         <el-input
           v-model="formData.controller"
           autocomplete="off"
+          placeholder="请输入路由controller"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -38,6 +40,7 @@
         <el-input
           v-model="formData.prefix"
           autocomplete="off"
+          placeholder="请输入路由前缀"
         ></el-input>
       </el-form-item>
       <el-form-item

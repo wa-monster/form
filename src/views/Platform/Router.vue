@@ -95,19 +95,22 @@
       ></el-pagination>
     </div>
     <Dialog ref="dialog"></Dialog>
+    <ConfirmBox ref="confirmBox"></ConfirmBox>
   </div>
 </template>
 
 <script>
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/routerDialog.vue";
-import searchBtn from '@/components/little/searchBtn'
+import searchBtn from "@/components/little/searchBtn";
 import { getRouterData, delRouterData } from "@/api/platform/router.js";
+import ConfirmBox from "@/components/little/confirmBox";
 export default {
   name: "Router",
   components: {
     Dialog,
-    searchBtn
+    searchBtn,
+    ConfirmBox
   },
   mixins: [mixin],
   data() {
@@ -137,7 +140,7 @@ export default {
         let params = {
           currentPage: this.page.currentPage,
           pageSize: this.page.pageSize,
-          keywords:this.page.keywords
+          keywords: this.page.keywords
         };
         let res = await getRouterData(params);
         this.routeData = res.list;
@@ -150,19 +153,33 @@ export default {
       this.$refs["dialog"].show();
     },
     remove() {
-      if (this.currentData && this.currentData.length !== 0) {
-        this.delete(this.routeData,this.currentData,delRouterData);
-        this.$message({ message: "删除成功", type: "success" });
-        this.currentData = [];
-      } else {
-        this.$message("请先选择一条数据");
+      if (this.currentData.length === 0) {
+        return;
       }
+      this.$refs.confirmBox
+        .comfirm(`确定要删除选中的${this.currentData.length}行内容?`)
+        .then(async resolve => {
+          await this.delete(this.routeData, this.currentData, delRouterData);
+          resolve();
+          this.currentData = [];
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     handleDelete(item) {
-      this.delete(this.routeData,item,delRouterData);
+      this.$refs.confirmBox
+        .comfirm("确定要删除本行内容?")
+        .then(async reslove => {
+          await this.delete(this.routeData, item, delRouterData);
+          reslove();
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     edit(item) {
-      this.$refs['dialog'].show(this.depClone(item));
+      this.$refs["dialog"].show(this.depClone(item));
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -196,12 +213,14 @@ export default {
   width: 160px;
   margin-left: 10px;
 }
+
 .router .myform-footer {
   text-align: right;
   position: absolute;
   right: 10px;
   bottom: 25px;
 }
+
 .router .myform-footer {
   text-align: right;
 }

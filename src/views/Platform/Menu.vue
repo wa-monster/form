@@ -35,7 +35,7 @@
       <div class="myform-body-left">
         <el-input
           v-model="keywords"
-          placeholder="请输入内容"
+          placeholder="请输入菜单名称"
           prefix-icon="el-icon-search"
         ></el-input>
         <div class="tree-box">
@@ -69,19 +69,26 @@
             <el-input
               ref="nameInput"
               v-model="formData.name"
+              placeholder="请输入菜单名称"
             ></el-input>
           </el-form-item>
           <el-form-item
             label="描述"
             prop="des"
           >
-            <el-input v-model="formData.des"></el-input>
+            <el-input
+              v-model="formData.des"
+              placeholder="请输入菜单描述"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="地址"
             prop="address"
           >
-            <el-input v-model="formData.address"></el-input>
+            <el-input
+              v-model="formData.address"
+              placeholder="请输入菜单地址"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="类型"
@@ -130,6 +137,7 @@
           </el-form-item>
         </el-form>
       </div>
+      <ConfirmBox ref="confirmBox"></ConfirmBox>
     </div>
   </div>
 </template>
@@ -143,9 +151,12 @@ import {
   delMenuData
 } from "@/api/platform/menu.js";
 import { Loading } from "element-ui";
+import ConfirmBox from "@/components/little/confirmBox";
 export default {
   name: "Page",
-  components: {},
+  components: {
+    ConfirmBox
+  },
   data() {
     return {
       keywords: "",
@@ -254,13 +265,19 @@ export default {
     },
     async remove(node) {
       if (!node) {
-        this.$message("请先选择一个菜单");
         return;
       }
-      let res = await delMenuData({ id: node.id });
-      this.$refs.menuForm.resetFields();
-      this.load();
-      this.$message("删除成功");
+      this.$refs.confirmBox
+        .comfirm("确定要删除本行内容?")
+        .then(async reslove => {
+          let res = await delMenuData({ id: node.id });
+          this.$refs.menuForm.resetFields();
+          this.load();
+          reslove();
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     filterNode(value, data, node) {
       if (!value) {
@@ -277,7 +294,9 @@ export default {
     },
     getReturnNode(node, _array, value) {
       let isPass =
-        node.data && node.data[this.defaultProps['label']] && node.data[this.defaultProps['label']].indexOf(value) !== -1;
+        node.data &&
+        node.data[this.defaultProps["label"]] &&
+        node.data[this.defaultProps["label"]].indexOf(value) !== -1;
       isPass ? _array.push(isPass) : "";
       if (!isPass && node.level != 1 && node.parent) {
         this.getReturnNode(node.parent, _array, value);

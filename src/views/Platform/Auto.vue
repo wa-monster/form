@@ -40,6 +40,7 @@
     </div>
     <el-table
       ref="Table"
+      v-loading="loading"
       border
       height="425"
       :data="tableData"
@@ -110,11 +111,12 @@ export default {
       tableData:[],
       activeData:[],
       inputVisible:false,
-      createLoading:false
+      createLoading:false,
+      loading:true,
     }
   },
   mounted(){
-    this.load()
+    this.onload()
   },
   methods:{
     async load(){
@@ -127,7 +129,7 @@ export default {
         let res = await getAutoList(params)
         this.tableData = res.list
         this.page.total = res.total
-
+        this.loading = false
       }catch(err){
         throw err
       }

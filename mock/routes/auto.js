@@ -14,11 +14,14 @@ module.exports = function (app) {
       autoListClone = [...autoList] 
     }
     let list = autoListClone.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
-    return res.json({
-      list,
-      code: 0,
-      total: autoList.length
-    })
+    setTimeout(()=>{
+      return res.json({
+        list,
+        code: 0,
+        total: autoList.length
+      })
+    },3000)
+ 
   })
   app.get('/createAutoList', (req, res, next) => {
     return res.json({

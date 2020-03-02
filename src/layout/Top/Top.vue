@@ -6,10 +6,19 @@
     <div
       class="top_left"
       @click="leftClick"
+      @mouseenter="handleEnter"
+      @mouseleave="handleEnter"
     >
-      <span
-        class="el-icon-close"
-      ></span>
+      <transition>
+        <span
+          v-if="lefeIcon"
+          class="el-icon-close"
+        ></span>
+        <span
+          v-else
+          class="el-icon-arrow-left"
+        ></span>
+      </transition>
     </div>
     <div
       class="top_mid"
@@ -43,6 +52,11 @@
 
 <script>
 export default {
+  data(){
+    return {
+      lefeIcon:true
+    }
+  },
   computed:{
     openMenu(){
       return this.$store.state.openMenu
@@ -53,11 +67,15 @@ export default {
   },  
   methods:{
     menuClick(){
+      
       this.$store.commit('SET_MENU')
     },
     leftClick(){
      this.$store.commit('SET_TOP')
     },
+    handleEnter(){
+      this.lefeIcon = !this.lefeIcon
+    }
  }
 }
 </script>

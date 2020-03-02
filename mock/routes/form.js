@@ -14,11 +14,13 @@ module.exports = function (app) {
       formListClone = [...formList] 
     }
     let list = formListClone.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
-    return res.json({
-      list,
-      code: 0,
-      total: formList.length
-    })
+    setTimeout(()=>{
+      return res.json({
+        list,
+        code: 0,
+        total: formList.length
+      })
+    },3000)
   })
   app.post('/deleteFormList',jsonParser,(req, res, next)=>{
     let body = req.body

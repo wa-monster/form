@@ -27,6 +27,7 @@
     </div>
     <div class="myform-body">
       <el-table
+        v-loading="loading"
         :data="filterData"
         border
         style="width: 100%"
@@ -143,7 +144,9 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
+        this.loading=true
         let res = await getPageData(params);
+        this.loading=false
         this.pageData = res.list;
         this.page.total = res.total;
       } catch (err) {

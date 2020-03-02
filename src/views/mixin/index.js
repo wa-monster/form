@@ -7,6 +7,7 @@ export default {
         pageSize:10,
         keywords:''
       },
+      loading:false
     }
   },
   watch:{

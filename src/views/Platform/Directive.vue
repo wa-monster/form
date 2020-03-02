@@ -24,6 +24,7 @@
     </div>
     <div class="myform-body">
       <el-table
+        v-loading="load"
         :data="instructionData"
         border
         style="width: 100%"
@@ -159,7 +160,9 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
+        this.loading=false;
         let res = await getDirectiveData(params);
+        this.loading=true;
         this.instructionData = res.list;
         this.page.total = res.total;
       } catch (err) {

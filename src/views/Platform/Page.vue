@@ -91,19 +91,22 @@
       ></el-pagination>
     </div>
     <Dialog ref="dialog"></Dialog>
+    <ConfirmBox ref="confirmBox"></ConfirmBox>
   </div>
 </template>
 
 <script>
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/pageDialog.vue";
-import searchBtn from '@/components/little/searchBtn'
+import searchBtn from "@/components/little/searchBtn";
 import { getPageData, delPageData } from "@/api/platform/page.js";
+import ConfirmBox from "@/components/little/confirmBox";
 export default {
   name: "Page",
   components: {
     Dialog,
-    searchBtn 
+    searchBtn,
+    ConfirmBox
   },
   mixins: [mixin],
   data() {
@@ -133,7 +136,7 @@ export default {
         let params = {
           currentPage: this.page.currentPage,
           pageSize: this.page.pageSize,
-          keywords:this.page.keywords
+          keywords: this.page.keywords
         };
         let res = await getPageData(params);
         this.pageData = res.list;
@@ -147,23 +150,37 @@ export default {
     },
     dialogShow() {
       // this.$refs["dialog"].show();
-      console.log('add');
+      console.log("add");
     },
     remove() {
-      if (this.currentData && this.currentData.length !== 0) {
-        this.delete(this.pageData, this.currentData, delPageData);
-        this.$message({ message: "删除成功", type: "success" });
-        this.currentData = [];
-      } else {
-        this.$message("请先选择一条数据");
+      if (this.currentData.length === 0) {
+        return;
       }
+      this.$refs.confirmBox
+        .comfirm(`确定要删除选中的${this.currentData.length}行内容?`)
+        .then(async resolve => {
+          await this.delete(this.pageData, this.currentData, delPageData);
+          resolve();
+          this.currentData = [];
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     handleDelete(item) {
-      this.delete(this.pageData, item, delPageData);
+      this.$refs.confirmBox
+        .comfirm("确定要删除本行内容?")
+        .then(async reslove => {
+          await this.delete(this.pageData, item, delPageData);
+          reslove();
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     edit(item) {
       // this.$refs["dialog"].show(this.depClone(item));
-      console.log('edit');
+      console.log("edit");
     },
     depClone(data) {
       return JSON.parse(JSON.stringify(data));
@@ -193,7 +210,7 @@ export default {
   margin-bottom: 10px;
 }
 
- .search_input {
+.search_input {
   width: 160px;
   margin-left: 10px;
 }

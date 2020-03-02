@@ -130,6 +130,7 @@
           </el-form-item>
         </el-form>
       </div>
+      <ConfirmBox ref="confirmBox"></ConfirmBox>
     </div>
   </div>
 </template>
@@ -143,9 +144,12 @@ import {
   delMenuData
 } from "@/api/platform/menu.js";
 import { Loading } from "element-ui";
+import ConfirmBox from "@/components/little/confirmBox";
 export default {
   name: "Page",
-  components: {},
+  components: {
+    ConfirmBox
+  },
   data() {
     return {
       keywords: "",
@@ -254,13 +258,19 @@ export default {
     },
     async remove(node) {
       if (!node) {
-        this.$message("请先选择一个菜单");
         return;
       }
-      let res = await delMenuData({ id: node.id });
-      this.$refs.menuForm.resetFields();
-      this.load();
-      this.$message("删除成功");
+      this.$refs.confirmBox
+        .comfirm("确定要删除本行内容?")
+        .then(async reslove => {
+          let res = await delMenuData({ id: node.id });
+          this.$refs.menuForm.resetFields();
+          this.load();
+          reslove();
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     filterNode(value, data, node) {
       if (!value) {
@@ -277,7 +287,9 @@ export default {
     },
     getReturnNode(node, _array, value) {
       let isPass =
-        node.data && node.data[this.defaultProps['label']] && node.data[this.defaultProps['label']].indexOf(value) !== -1;
+        node.data &&
+        node.data[this.defaultProps["label"]] &&
+        node.data[this.defaultProps["label"]].indexOf(value) !== -1;
       isPass ? _array.push(isPass) : "";
       if (!isPass && node.level != 1 && node.parent) {
         this.getReturnNode(node.parent, _array, value);

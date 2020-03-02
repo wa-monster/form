@@ -71,7 +71,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(instructionData,scope.row)"
+              @click="handleDelete(scope.row)"
             >
               删除
             </el-button>
@@ -97,12 +97,14 @@
       ></el-pagination>
     </div>
     <Dialog ref="dialog"></Dialog>
+    <ConfirmBox ref="confirmBox"></ConfirmBox>
   </div>
 </template>
 <script>
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/instructionDialog.vue";
-import searchBtn from '@/components/little/searchBtn'
+import searchBtn from "@/components/little/searchBtn";
+import ConfirmBox from "@/components/little/confirmBox";
 import {
   getDirectiveData,
   delDirectiveData
@@ -111,7 +113,8 @@ export default {
   name: "Directive",
   components: {
     Dialog,
-    searchBtn
+    searchBtn,
+    ConfirmBox
   },
   mixins: [mixin],
   data() {
@@ -178,16 +181,34 @@ export default {
       this.dialogFormVisible = false;
     },
     remove() {
-      if (this.currentData && this.currentData.length !== 0) {
-        this.delete(this.instructionData, this.currentData, delDirectiveData);
-        this.$message({ message: "删除成功", type: "success" });
-        this.currentData = [];
-      } else {
-        this.$message("请先选择一条数据");
+      if (this.currentData === 0) {
+        return;
       }
+      this.$refs.confirmBox
+        .comfirm(`确定要删除选中的${this.instructionData.length}行内容?`)
+        .then(async resolve => {
+          await this.delete(
+            this.instructionData,
+            this.currentData,
+            delDirectiveData
+          );
+          resolve();
+          this.currentData = [];
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
-    handleDelete(data, item) {
-      this.delete(data, item, delDirectiveData);
+    handleDelete(item) {
+      this.$refs.confirmBox
+        .comfirm("确定要删除本行内容?")
+        .then(async reslove => {
+          await this.delete(this.instructionData, item, delDirectiveData);
+          reslove();
+        })
+        .catch(err => {
+          console.log("取消");
+        });
     },
     edit(item) {
       this.$refs["dialog"].show(this.depClone(item));

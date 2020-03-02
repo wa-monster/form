@@ -21,6 +21,7 @@
         <el-input
           v-model="formData.name"
           autocomplete="off"
+          placeholder="请输入服务名称"
         ></el-input>
       </el-form-item>
       <el-form-item label="参数描述">
@@ -71,6 +72,7 @@
                 v-model="item.name"
                 autocomplete="off"
                 style="width:200px"
+                placeholder="请输入姓名"
               ></el-input>
             </el-form-item>
           </el-form>

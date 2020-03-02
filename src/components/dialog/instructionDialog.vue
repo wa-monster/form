@@ -21,6 +21,7 @@
         <el-input
           v-model="formData.name"
           autocomplete="off"
+          placeholder="请输入指令名称"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -30,6 +31,7 @@
         <el-input
           v-model="formData.code"
           autocomplete="off"
+          placeholder="请输入指令代码"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -39,6 +41,7 @@
         <el-input
           v-model="formData.fn"
           autocomplete="off"
+          placeholder="请输入功能描述"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -83,6 +86,7 @@
               <el-input
                 v-model="item.label"
                 autocomplete="off"
+                placeholder="请输入label"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -92,6 +96,7 @@
               <el-input
                 v-model="item.name"
                 autocomplete="off"
+                placeholder="请输入变量名"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -121,6 +126,7 @@
               <el-input
                 v-model="item.default"
                 autocomplete="off"
+                placeholder="请输入默认值"
               ></el-input>
             </el-form-item>
           </el-form>

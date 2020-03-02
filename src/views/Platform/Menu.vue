@@ -35,7 +35,7 @@
       <div class="myform-body-left">
         <el-input
           v-model="keywords"
-          placeholder="请输入内容"
+          placeholder="请输入菜单名称"
           prefix-icon="el-icon-search"
         ></el-input>
         <div class="tree-box">
@@ -69,19 +69,26 @@
             <el-input
               ref="nameInput"
               v-model="formData.name"
+              placeholder="请输入菜单名称"
             ></el-input>
           </el-form-item>
           <el-form-item
             label="描述"
             prop="des"
           >
-            <el-input v-model="formData.des"></el-input>
+            <el-input
+              v-model="formData.des"
+              placeholder="请输入菜单描述"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="地址"
             prop="address"
           >
-            <el-input v-model="formData.address"></el-input>
+            <el-input
+              v-model="formData.address"
+              placeholder="请输入菜单地址"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="类型"

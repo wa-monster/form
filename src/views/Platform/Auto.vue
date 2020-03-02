@@ -128,24 +128,7 @@ export default {
       }catch(err){
         throw err
       }
-    },
-    // inputShow(){
-    //   this.inputVisible = true
-    //   this.$nextTick(()=>{
-    //     this.$refs.search.focus()
-    //   })
-      
-    // },
-    // searchData(){
-    //   if(this.page.searchKey === ''){
-    //     return 
-    //   }
-    //   this.load()
-    // },
-    // clearVal(){
-    //   this.inputVisible = false
-    //   this.searchKey = ""
-    // }
+    }
   }
 }
 </script>

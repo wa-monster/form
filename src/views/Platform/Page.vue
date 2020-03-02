@@ -48,9 +48,11 @@
           prop="components"
           label="组件集"
           align="center"
-          :formatter="formatter"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <ToolTip :text="formatter(scope.row)"></ToolTip>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="type"
           label="类型"
@@ -101,11 +103,13 @@ import Dialog from "@/components/dialog/pageDialog.vue";
 import searchBtn from "@/components/little/searchBtn";
 import { getPageData, delPageData } from "@/api/platform/page.js";
 import ConfirmBox from "@/components/little/confirmBox";
+import ToolTip from '@/components/little/tooltip'
 export default {
   name: "Page",
   components: {
     Dialog,
     searchBtn,
+    ToolTip,
     ConfirmBox
   },
   mixins: [mixin],

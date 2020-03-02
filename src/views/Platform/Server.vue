@@ -46,8 +46,11 @@
           label="指令集"
           align="center"
           :formatter="formatter"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <ToolTip :text="formatter(scope.row)"></ToolTip>
+          </template>
+        </el-table-column>
         <el-table-column
           width="180"
           label="操作"
@@ -92,11 +95,13 @@ import Dialog from "@/components/dialog/serverDialog.vue";
 import searchBtn from "@/components/little/searchBtn";
 import { getServerData, delServerData } from "@/api/platform/server.js";
 import ConfirmBox from "@/components/little/confirmBox";
+import ToolTip from '@/components/little/tooltip'
 export default {
   name: "Server",
   components: {
     Dialog,
     searchBtn,
+    ToolTip,
     ConfirmBox
   },
   mixins: [mixin],

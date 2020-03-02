@@ -53,9 +53,11 @@
           prop="params"
           label="参数描述"
           align="center"
-          :show-overflow-tooltip="true"
-          :formatter="formatter"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <ToolTip :text="formatter(scope.row)"></ToolTip>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="fn"
           label="功能"
@@ -104,6 +106,7 @@
 import mixin from "@/views/mixin";
 import Dialog from "@/components/dialog/instructionDialog.vue";
 import searchBtn from "@/components/little/searchBtn";
+import ToolTip from '@/components/little/tooltip'
 import ConfirmBox from "@/components/little/confirmBox";
 import {
   getDirectiveData,
@@ -114,6 +117,7 @@ export default {
   components: {
     Dialog,
     searchBtn,
+    ToolTip,
     ConfirmBox
   },
   mixins: [mixin],
@@ -181,11 +185,11 @@ export default {
       this.dialogFormVisible = false;
     },
     remove() {
-      if (this.currentData === 0) {
+      if (this.currentData.length === 0) {
         return;
       }
       this.$refs.confirmBox
-        .comfirm(`确定要删除选中的${this.instructionData.length}行内容?`)
+        .comfirm(`确定要删除选中的${this.currentData.length}行内容?`)
         .then(async resolve => {
           await this.delete(
             this.instructionData,

@@ -25,6 +25,7 @@
     </div>
     <el-table
       ref="Table"
+      v-loading="loading"
       border
       height="425"
       :data="tableData"
@@ -137,11 +138,11 @@ export default {
     return {
       tableData:[],
       activeData:[],
-      activeLoading:false
+      activeLoading:false,
     }
   },
   mounted(){
-    this.load()
+    this.onload()
   },
   methods:{
     async load(){
@@ -153,7 +154,6 @@ export default {
         let res = await getOriginList(params)
         this.tableData = res.list
         this.page.total = res.total
-
       }catch(err){
         throw err
       }

@@ -4,6 +4,7 @@
     :visible.sync="dialogVisible"
     :close-on-click-modal="false"
     width="500"
+    :show-close="!loading"
   >
     <el-form
       ref="dataForm"
@@ -77,7 +78,10 @@
       slot="footer"
       class="dialog-footer"
     >
-      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button
+        :loading="loading"
+        @click="dialogVisible = false"
+      >取 消</el-button>
       <el-button
         type="primary"
         :loading="loading"

@@ -9,11 +9,13 @@ module.exports = function (app) {
   app.get('/datalist', (req, res, next) => {
     let { currentPage, pageSize } = req.query
     let list = datalist.slice((currentPage - 1) * pageSize, (currentPage * pageSize))
-    return res.json({
-      list,
-      code: 0,
-      total: datalist.length
-    })
+    setTimeout(()=>{
+      return res.json({
+        list,
+        code: 0,
+        total: datalist.length
+      })
+    },3000)
   })
  //增加列表
   app.post('/addData',jsonParser,(req,res,next)=>{

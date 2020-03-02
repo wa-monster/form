@@ -5,19 +5,25 @@ export default {
         currentPage: 1,
         total:10,
         pageSize:10,
-        keywords:''
+        keywords:'',
       },
+      loading:true
     }
   },
   watch:{
     'page.currentPage'(){
-      this.load()
+      this.onload()
     },
   },
   methods:{
+    async onload(){
+      this.loading = true
+      await this.load()
+      this.loading = false
+    },
     sizeChange(size){
       this.page.pageSize = size
-      this.load()
+      this.onload()
     },
     currentChange(currentPage){
       this.page.currentPage = currentPage

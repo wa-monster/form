@@ -38,6 +38,7 @@
     </div>
     <el-table
       ref="Table"
+      v-loading="loading"
       border
       height="425"
       :data="tableData"
@@ -155,7 +156,7 @@ export default {
     }
   },
   mounted(){
-    this.load()
+    this.onload()
   },
   methods:{
     async load(){

@@ -4,6 +4,7 @@
     class="confirm_box"
     :visible.sync="visible"
     :close-on-click-modal="false"
+    :show-close="false"
     width="400px"
   >
     <slot>
@@ -13,6 +14,7 @@
     <div slot="footer">
       <el-button
         size="mini"
+        :loading="loading"
         @click="cancel"
       >
         取消

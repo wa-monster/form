@@ -177,7 +177,7 @@ export default {
         return 
       }
       this.$refs.confirmBox.comfirm(`确定要删除选中的${this.activeData.length}行内容?`).then(async(resolve)=>{
-        this.delete(this.tableData,this.activeData,deleteOrigin)
+        await this.delete(this.tableData,this.activeData,deleteOrigin)
         resolve()
       }).catch(err=>{
         console.log('取消')
@@ -186,6 +186,10 @@ export default {
     deleteClick(scope){
       let row = scope.row
       this.$refs.confirmBox.comfirm('确定要删除本行内容?').then(async(resolve)=>{
+        //   setTimeout(()=>{
+        //   console.log('12312')
+        //   resolve()
+        // },5000)
         await this.delete(this.tableData,[row],deleteOrigin)
         resolve()
       }).catch(err=>{

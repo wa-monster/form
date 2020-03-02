@@ -5,74 +5,75 @@
     :visible.sync="visible"
     :before-close="resetForm"
   >
-    <el-form
-      ref="formData"
-      :model="formData"
-      label-position="left"
-      :label-width="formLabelWidth"
-      size="mini"
-      :rules="routerFormRule"
-    >
-      <el-form-item
-        label="路由名称"
-        prop="name"
+    <div>
+      <el-form
+        ref="formData"
+        :model="formData"
+        label-position="left"
+        :label-width="formLabelWidth"
+        size="mini"
+        :rules="routerFormRule"
       >
-        <el-input
-          v-model="formData.name"
-          autocomplete="off"
-          placeholder="请输入路由名称"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="controller"
-        prop="controller"
-      >
-        <el-input
-          v-model="formData.controller"
-          autocomplete="off"
-          placeholder="请输入路由controller"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="前缀"
-        prop="prefix"
-      >
-        <el-input
-          v-model="formData.prefix"
-          autocomplete="off"
-          placeholder="请输入路由前缀"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="服务"
-        prop="server"
-      >
-        <el-select
-          v-model="formData.server"
-          placeholder="请选择"
+        <el-form-item
+          label="路由名称"
+          prop="name"
         >
-          <el-option
-            v-for="item in server"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <div
-      slot="footer"
-      style="text-align: center;"
-    >
-      <el-button
-        type="primary"
-        @click="handleSubmit"
+          <el-input
+            v-model="formData.name"
+            autocomplete="off"
+            placeholder="请输入路由名称"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="controller"
+          prop="controller"
+        >
+          <el-input
+            v-model="formData.controller"
+            autocomplete="off"
+            placeholder="请输入路由controller"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="前缀"
+          prop="prefix"
+        >
+          <el-input
+            v-model="formData.prefix"
+            autocomplete="off"
+            placeholder="请输入路由前缀"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="服务"
+          prop="server"
+        >
+          <el-select
+            v-model="formData.server"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in server"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div
+        style="text-align: center;"
       >
-        确 定
-      </el-button>
-      <el-button @click="resetForm">
-        取 消
-      </el-button>
+        <el-button
+          type="primary"
+          @click="handleSubmit"
+        >
+          确 定
+        </el-button>
+        <el-button @click="resetForm">
+          取 消
+        </el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -119,7 +120,8 @@ export default {
         controller: "",
         prefix: "",
         server: ""
-      }
+      },
+      loading:true,
     };
   },
   methods: {
@@ -140,6 +142,9 @@ export default {
       this.visible = true;
     },
     resetForm() {
+      if(this.loading){
+        return
+      }
       this.$refs["formData"].resetFields();
       for (let key in this.formData) {
         this.formData[key] = "";
@@ -157,7 +162,9 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
+          this.loading=true;
           let res=await addRouterData(this.formData);
+          this.loading=false;
           this.$parent.load();
           this.$message({
             message: "添加成功",
@@ -165,7 +172,9 @@ export default {
           });
           this.resetForm();
         } else {
+          this.loading=true;
           let res=await editRouterData(this.formData);
+          this.loading=false;
           this.$parent.load();
           this.$message({
             message: "修改成功",

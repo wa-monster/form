@@ -1,5 +1,8 @@
 <template>
-  <div class="menuView">
+  <div
+    v-loading="loading"
+    class="menuView"
+  >
     <div class="myform-header">
       <div class="btn-group">
         <el-button
@@ -186,7 +189,8 @@ export default {
           { required: true, message: "请选择是否可用", trigger: "change" }
         ],
         hide: [{ required: true, message: "请选择是否隐藏", trigger: "change" }]
-      }
+      },
+      loading:false
     };
   },
   computed: {},
@@ -203,11 +207,9 @@ export default {
     async load() {
       try {
         let params = {};
-        let loadingInstance = Loading.service({
-          target: ".menuView"
-        });
+        this.loading=true;
         let res = await getMenuData(params);
-        loadingInstance.close();
+        this.loading=false;
         this.menuData = res.data;
       } catch (err) {
         throw err;

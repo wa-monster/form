@@ -24,6 +24,7 @@
     </div>
     <div class="myform-body">
       <el-table
+        v-loading="loading"
         :data="instructionData"
         border
         style="width: 100%"
@@ -79,6 +80,7 @@
             </el-button>
             <el-button
               size="mini"
+              type="info"
               @click="edit(scope.row)"
             >
               修改
@@ -158,7 +160,9 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
+        this.loading=true;
         let res = await getDirectiveData(params);
+        this.loading=false;
         this.instructionData = res.list;
         this.page.total = res.total;
       } catch (err) {

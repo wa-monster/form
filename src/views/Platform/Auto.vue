@@ -4,6 +4,8 @@
       <el-button
         size="medium"
         type="primary"
+        :loading="createLoading"
+        @click="createData"
       >
         生成
       </el-button>
@@ -94,7 +96,7 @@
 
 <script>
 import mixin from '@/views/mixin'
-import {getAutoList} from '@/api/platform/auto'
+import {getAutoList, createAutoList} from '@/api/platform/auto'
 import searchBtn from '@/components/little/searchBtn'
 
 export default {
@@ -108,6 +110,7 @@ export default {
       tableData:[],
       activeData:[],
       inputVisible:false,
+      createLoading:false
     }
   },
   mounted(){
@@ -125,6 +128,21 @@ export default {
         this.tableData = res.list
         this.page.total = res.total
 
+      }catch(err){
+        throw err
+      }
+    },
+    async createData(){
+      try{
+        this.createLoading = true
+        let res = await createAutoList()
+
+        this.createLoading = false
+        this.$message({
+          message:'生成成功',
+          type: 'success',
+          duration:'2000'
+        })
       }catch(err){
         throw err
       }

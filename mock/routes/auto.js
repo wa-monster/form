@@ -20,4 +20,9 @@ module.exports = function (app) {
       total: autoList.length
     })
   })
+  app.get('/createAutoList', (req, res, next) => {
+    return res.json({
+      code: 0,
+    })
+  })
 }

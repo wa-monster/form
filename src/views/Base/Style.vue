@@ -4,6 +4,7 @@
       <el-button
         size="medium"
         type="primary"
+        :loading="addLoading"
         @click="add"
       >
         添加
@@ -11,6 +12,7 @@
 
       <el-button
         size="medium"
+        :loading="activeLoading"
         @click="active"
       >
         生效
@@ -69,6 +71,8 @@
 <script>
 import left from '@/assets/leftTop.jpg'
 import right from '@/assets/rightTop.jpg'
+import {addStyle,activeStyle} from '../../api/base/style'
+
 export default {
   name:"Style",
   data(){
@@ -96,15 +100,40 @@ export default {
         layout:[
           {required:true,message:'请选择布局',trigger:'cahnge'}
         ]
-      }
+      },
+      activeLoading:false,
+      addLoading:false,
     }
   },
   methods:{
-    add(){
-
-    },
-    active(){
+    async add(){
+      try{
+        this.addLoading = true
+        let res = await addStyle()
+        this.addLoading = false
+      }catch(err){
+        throw err
+      }
       
+      // this.$message( {
+      //   message:'删除成功',
+      //   type: 'success',
+      //   duration:'2000'
+      // })
+    },
+    async active(){
+      try{
+        this.activeLoading = true
+        let res = await activeStyle()
+        this.activeLoading = false
+        this.$message( {
+          message:'生效成功',
+          type: 'success',
+          duration:'2000'
+        })
+      }catch(err){
+        throw err
+      }
     }
   }
 }

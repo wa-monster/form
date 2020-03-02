@@ -79,6 +79,7 @@
             </el-button>
             <el-button
               size="mini"
+              type="info"
               @click="edit(scope.row)"
             >
               修改

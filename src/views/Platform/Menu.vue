@@ -44,6 +44,7 @@
               ref="tree"
               :data="menuData"
               :props="defaultProps"
+              :filter-node-method="filterNode"
               node-key="id"
               :default-expanded-keys="[1]"
               :highlight-current="true"
@@ -178,6 +179,11 @@ export default {
     };
   },
   computed: {},
+  watch: {
+    keywords(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   created() {
     this.load();
   },
@@ -187,7 +193,7 @@ export default {
       try {
         let params = {};
         let loadingInstance = Loading.service({
-          target: ".menuView",
+          target: ".menuView"
         });
         let res = await getMenuData(params);
         loadingInstance.close();
@@ -246,15 +252,36 @@ export default {
         }
       }
     },
-    async remove(node){
+    async remove(node) {
       if (!node) {
         this.$message("请先选择一个菜单");
         return;
-      }        
-      let res=await delMenuData({id:node.id});
+      }
+      let res = await delMenuData({ id: node.id });
       this.$refs.menuForm.resetFields();
       this.load();
       this.$message("删除成功");
+    },
+    filterNode(value, data, node) {
+      if (!value) {
+        return true;
+      }
+      let level = node.level;
+      let _array = [];
+      this.getReturnNode(node, _array, value);
+      let result = false;
+      _array.forEach(item => {
+        result = result || item;
+      });
+      return result;
+    },
+    getReturnNode(node, _array, value) {
+      let isPass =
+        node.data && node.data[this.defaultProps['label']] && node.data[this.defaultProps['label']].indexOf(value) !== -1;
+      isPass ? _array.push(isPass) : "";
+      if (!isPass && node.level != 1 && node.parent) {
+        this.getReturnNode(node.parent, _array, value);
+      }
     }
   }
 };

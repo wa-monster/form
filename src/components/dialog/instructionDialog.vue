@@ -5,147 +5,148 @@
     :visible.sync="visible"
     :before-close="resetForm"
   >
-    <el-form
-      ref="formData"
-      :model="formData"
-      label-position="left"
-      :label-width="formLabelWidth"
-      size="mini"
-      :rules="instructionFormRule"
-      class="sec-form"
-    >
-      <el-form-item
-        label="指令名称"
-        prop="name"
+    <div v-loading="loading">
+      <el-form
+        ref="formData"
+        :model="formData"
+        label-position="left"
+        :label-width="formLabelWidth"
+        size="mini"
+        :rules="instructionFormRule"
+        class="sec-form"
       >
-        <el-input
-          v-model="formData.name"
-          autocomplete="off"
-          placeholder="请输入指令名称"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="指令代码"
-        prop="code"
-      >
-        <el-input
-          v-model="formData.code"
-          autocomplete="off"
-          placeholder="请输入指令代码"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="功能描述"
-        prop="fn"
-      >
-        <el-input
-          v-model="formData.fn"
-          autocomplete="off"
-          placeholder="请输入功能描述"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="类型"
-        prop="type"
-      >
-        <el-radio-group v-model="formData.type">
-          <el-radio :label="0">
-            mysql
-          </el-radio>
-          <el-radio :label="1">
-            postgres
-          </el-radio>
-          <el-radio :label="2">
-            oracle
-          </el-radio>
-          <el-radio :label="3">
-            mongodb
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="参数描述">
-        <br />
         <el-form-item
-          v-for="(item,index) in formData.params"
-          :key="index"
-          :label="`参数${index+1}`"
-          label-width="56px"
+          label="指令名称"
+          prop="name"
         >
-          <br />
-          <el-form
-            ref="childForm"
-            :rules="childFormRule"
-            size="mini"
-            :model="formData.params[index]"
-            label-width="65px"
-          >
-            <el-form-item
-              label="label"
-              prop="label"
-            >
-              <el-input
-                v-model="item.label"
-                autocomplete="off"
-                placeholder="请输入label"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="变量名"
-              prop="name"
-            >
-              <el-input
-                v-model="item.name"
-                autocomplete="off"
-                placeholder="请输入变量名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="类型"
-              prop="type"
-            >
-              <el-radio-group v-model="item.type">
-                <el-radio :label="0">
-                  数值
-                </el-radio>
-                <el-radio :label="1">
-                  字符
-                </el-radio>
-                <el-radio :label="2">
-                  数组
-                </el-radio>
-                <el-radio :label="3">
-                  日期
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item
-              label="默认值"
-              prop="default"
-              style="margin-bottom:0px"
-            >
-              <el-input
-                v-model="item.default"
-                autocomplete="off"
-                placeholder="请输入默认值"
-              ></el-input>
-            </el-form-item>
-          </el-form>
+          <el-input
+            v-model="formData.name"
+            autocomplete="off"
+            placeholder="请输入指令名称"
+          ></el-input>
         </el-form-item>
-      </el-form-item>
-    </el-form>
-    <div
-      slot="footer"
-      style="text-align: center;"
-    >
-      <el-button
-        type="primary"
-        @click="handleSubmit"
+        <el-form-item
+          label="指令代码"
+          prop="code"
+        >
+          <el-input
+            v-model="formData.code"
+            autocomplete="off"
+            placeholder="请输入指令代码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="功能描述"
+          prop="fn"
+        >
+          <el-input
+            v-model="formData.fn"
+            autocomplete="off"
+            placeholder="请输入功能描述"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="类型"
+          prop="type"
+        >
+          <el-radio-group v-model="formData.type">
+            <el-radio :label="0">
+              mysql
+            </el-radio>
+            <el-radio :label="1">
+              postgres
+            </el-radio>
+            <el-radio :label="2">
+              oracle
+            </el-radio>
+            <el-radio :label="3">
+              mongodb
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="参数描述">
+          <br />
+          <el-form-item
+            v-for="(item,index) in formData.params"
+            :key="index"
+            :label="`参数${index+1}`"
+            label-width="56px"
+          >
+            <br />
+            <el-form
+              ref="childForm"
+              :rules="childFormRule"
+              size="mini"
+              :model="formData.params[index]"
+              label-width="65px"
+            >
+              <el-form-item
+                label="label"
+                prop="label"
+              >
+                <el-input
+                  v-model="item.label"
+                  autocomplete="off"
+                  placeholder="请输入label"
+                ></el-input>
+              </el-form-item>
+              <el-form-item
+                label="变量名"
+                prop="name"
+              >
+                <el-input
+                  v-model="item.name"
+                  autocomplete="off"
+                  placeholder="请输入变量名"
+                ></el-input>
+              </el-form-item>
+              <el-form-item
+                label="类型"
+                prop="type"
+              >
+                <el-radio-group v-model="item.type">
+                  <el-radio :label="0">
+                    数值
+                  </el-radio>
+                  <el-radio :label="1">
+                    字符
+                  </el-radio>
+                  <el-radio :label="2">
+                    数组
+                  </el-radio>
+                  <el-radio :label="3">
+                    日期
+                  </el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item
+                label="默认值"
+                prop="default"
+                style="margin-bottom:0px"
+              >
+                <el-input
+                  v-model="item.default"
+                  autocomplete="off"
+                  placeholder="请输入默认值"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+          </el-form-item>
+        </el-form-item>
+      </el-form>
+      <div
+        style="text-align: center;"
       >
-        确 定
-      </el-button>
-      <el-button @click="resetForm">
-        取 消
-      </el-button>
+        <el-button
+          type="primary"
+          @click="handleSubmit"
+        >
+          确 定
+        </el-button>
+        <el-button @click="resetForm">
+          取 消
+        </el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -181,6 +182,7 @@ export default {
         ]
       },
       type:"add",
+      loading:false,
     };
   },
   methods: {
@@ -201,6 +203,9 @@ export default {
       this.visible=true;
     },
     resetForm() {
+      if(this.loading){
+        return
+      }
       this.$refs["formData"].resetFields();
       this.$refs["childForm"].forEach(item => {
         item.resetFields();
@@ -240,7 +245,9 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
+          this.loading=true;
           let res=await addDirectiveData(this.formData);
+          this.loading=false;
           this.$parent.load();
           this.$message({
             message: "添加成功",
@@ -248,7 +255,9 @@ export default {
           });
           this.resetForm();
         } else {
+          this.loading=true;
           let res=await editDirectiveData(this.formData);
+          this.loading=false;
           this.$parent.load();
           this.$message({
             message: "修改成功",

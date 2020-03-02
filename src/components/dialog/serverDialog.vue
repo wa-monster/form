@@ -5,93 +5,95 @@
     :visible.sync="visible"
     :before-close="resetForm"
   >
-    <el-form
-      ref="formData"
-      :model="formData"
-      label-position="left"
-      :label-width="formLabelWidth"
-      size="mini"
-      :rules="ServerFormRule"
-      class="sec-form"
-    >
-      <el-form-item
-        label="服务名称"
-        prop="name"
+    <div v-loading="loading">
+      <el-form
+        ref="formData"
+        :model="formData"
+        label-position="left"
+        :label-width="formLabelWidth"
+        size="mini"
+        :rules="ServerFormRule"
+        class="sec-form"
       >
-        <el-input
-          v-model="formData.name"
-          autocomplete="off"
-          placeholder="请输入服务名称"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="参数描述">
-        <i
-          class="el-icon-plus addRow"
-          @click="addRow"
-        ></i>
-        <br />
         <el-form-item
-          v-for="(item,index) in formData.directives"
-          :key="index"
-          :label="`指令${index+1}`"
-          label-width="56px"
+          label="服务名称"
+          prop="name"
         >
-          <el-form
-            ref="childForm"
-            size="mini"
-            :model="formData.directives[index]"
-          >
-            <el-form-item
-              prop="directiveName"
-              label-width="0px"
-            >
-              <el-select
-                v-model="item.directiveName"
-                placeholder="请选择"
-                class="Server-select"
-              >
-                <el-option
-                  v-for="i in Servers"
-                  :key="i.value"
-                  :label="i.label"
-                  :value="i.value"
-                ></el-option>
-              </el-select>
-              <i
-                class="el-icon-minus removeRow"
-                @click="removeRow(item)"
-              ></i>
-            </el-form-item>
-            <el-form-item
-              label="姓名"
-              prop="name"
-              label-width="50px"
-              :rules="{required:item.directiveName!='',message:'请输入姓名',change:'blur'}"
-            >
-              <el-input
-                v-model="item.name"
-                autocomplete="off"
-                style="width:200px"
-                placeholder="请输入姓名"
-              ></el-input>
-            </el-form-item>
-          </el-form>
+          <el-input
+            v-model="formData.name"
+            autocomplete="off"
+            placeholder="请输入服务名称"
+          ></el-input>
         </el-form-item>
-      </el-form-item>
-    </el-form>
-    <div
-      slot="footer"
-      style="text-align: center;"
-    >
-      <el-button
-        type="primary"
-        @click="handleSubmit"
+        <el-form-item label="参数描述">
+          <i
+            class="el-icon-plus addRow"
+            @click="addRow"
+          ></i>
+          <br />
+          <el-form-item
+            v-for="(item,index) in formData.directives"
+            :key="index"
+            :label="`指令${index+1}`"
+            label-width="56px"
+          >
+            <el-form
+              ref="childForm"
+              size="mini"
+              :model="formData.directives[index]"
+            >
+              <el-form-item
+                prop="directiveName"
+                label-width="0px"
+              >
+                <el-select
+                  v-model="item.directiveName"
+                  placeholder="请选择"
+                  class="Server-select"
+                >
+                  <el-option
+                    v-for="i in Servers"
+                    :key="i.value"
+                    :label="i.label"
+                    :value="i.value"
+                  ></el-option>
+                </el-select>
+                <i
+                  class="el-icon-minus removeRow"
+                  @click="removeRow(item)"
+                ></i>
+              </el-form-item>
+              <el-form-item
+                label="姓名"
+                prop="name"
+                label-width="50px"
+                :rules="{required:item.directiveName!='',message:'请输入姓名',change:'blur'}"
+              >
+                <el-input
+                  v-model="item.name"
+                  autocomplete="off"
+                  style="width:200px"
+                  placeholder="请输入姓名"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+          </el-form-item>
+        </el-form-item>
+      </el-form>
+      <div
+        slot="footer"
+        style="text-align: center;"
       >
-        确 定
-      </el-button>
-      <el-button @click="resetForm">
-        取 消
-      </el-button>
+        <el-button
+          type="primary"
+          @click="handleSubmit"
+        >
+          确 定
+        </el-button>
+        <el-button @click="resetForm">
+          取 消
+        </el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -131,7 +133,8 @@ export default {
       },
       visible: false,
       type: "add",
-      title: "增加"
+      title: "增加",
+      loading:true
     };
   },
   methods: {
@@ -165,6 +168,9 @@ export default {
       return JSON.parse(JSON.stringify(data));
     },
     resetForm() {
+      if(this.loading){
+        return
+      }
       this.$refs["formData"].resetFields();
       if (this.$refs["childForm"]) {
         this.$refs["childForm"].forEach(item => {
@@ -200,7 +206,9 @@ export default {
       });
       if (canSubmit) {
         if (this.type == "add") {
+          this.loading=true
           let res = await addServerData(this.formData);
+          this.loading=false
           this.$parent.load();
           this.$message({
             message: "添加成功",
@@ -208,7 +216,9 @@ export default {
           });
           this.resetForm();
         } else {
+          this.loading=true
           let res = await editServerData(this.formData);
+          this.loading=false
           this.$parent.load();
           this.$message({
             message: "修改成功",

@@ -150,7 +150,7 @@ export default {
     }
   },
   created() {
-    this.load();
+    this.onLoading();
   },
   methods: {
     async load() {
@@ -160,9 +160,7 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
-        this.loading=true;
         let res = await getDirectiveData(params);
-        this.loading=false;
         this.instructionData = res.list;
         this.page.total = res.total;
       } catch (err) {

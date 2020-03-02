@@ -136,9 +136,7 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
-        this.loading=true
         let res = await getServerData(params);
-        this.loading=false
         this.serverData = res.list;
         this.page.total = res.total;
       } catch (err) {

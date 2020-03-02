@@ -144,9 +144,7 @@ export default {
           pageSize: this.page.pageSize,
           keywords: this.page.keywords
         };
-        this.loading=true;
         let res = await getRouterData(params);
-        this.loading=false;
         this.routeData = res.list;
         this.page.total = res.total;
       } catch (err) {

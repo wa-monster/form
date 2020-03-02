@@ -113,6 +113,7 @@
       @onload="load"
     >  
     </DataDialog>
+    <ConfirmBox ref="confirmBox"></ConfirmBox>
   </div>
 </template>
 
@@ -120,13 +121,15 @@
 import mixin from '@/views/mixin'
 import DataDialog from '@/components/dialog/dataDialog'
 import ToolTip from '@/components/little/tooltip'
+import ConfirmBox from '@/components/little/confirmBox'
 
 import { getOriginList,activeOrigin,deleteOrigin } from '@/api/base/origin'
 export default {
   name:'Origin',
   components:{
     DataDialog,
-    ToolTip
+    ToolTip,
+    ConfirmBox
   },
   mixins:[mixin],
   data(){
@@ -166,24 +169,21 @@ export default {
       if(this.activeData.length === 0){
         return 
       }
-      this.$confirm(`确定要删除选中的${this.activeData.length}行内容?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(()=>{
+      this.$refs.confirmBox.comfirm(`确定要删除选中的${this.activeData.length}行内容?`).then(async(resolve)=>{
         this.delete(this.tableData,this.activeData,deleteOrigin)
+        resolve()
+      }).catch(err=>{
+        console.log('取消')
       })
     },
     deleteClick(scope){
       let row = scope.row
-      this.$confirm('确定要删除本行内容?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then( ()=>{
-        this.delete(this.tableData,[row],deleteOrigin)
+      this.$refs.confirmBox.comfirm('确定要删除本行内容?').then(async(resolve)=>{
+        await this.delete(this.tableData,[row],deleteOrigin)
+        resolve()
+      }).catch(err=>{
+        console.log('取消')
       })
-      
     },
     async activeClick(){
       try{

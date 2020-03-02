@@ -41,7 +41,7 @@ export default {
           params=[];
           params.push(item.id);
         }
-        let res = await fn(params);
+        let res = await fn(params)
         this.$message({
           message:'删除成功',
           type: 'success',

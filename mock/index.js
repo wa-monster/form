@@ -1,6 +1,8 @@
 
 //数据源设置接口
 let origin=require('./routes/origin')
+//样式设置接口
+let style = require('./routes/style')
 //自动生成器接口
 let auto = require('./routes/auto')
 //表单库接口
@@ -13,6 +15,7 @@ let page=require('./routes/page')
 let menu=require('./routes/menu')
 module.exports = function (app) {
   origin(app);
+  style(app);
   auto(app);
   form(app);
   directive(app);

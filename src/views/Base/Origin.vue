@@ -17,6 +17,7 @@
       </el-button>
       <el-button
         size="medium"
+        :loading="activeLoading"
         @click="activeClick"
       >
         选中生效
@@ -136,6 +137,7 @@ export default {
     return {
       tableData:[],
       activeData:[],
+      activeLoading:false
     }
   },
   mounted(){
@@ -167,6 +169,11 @@ export default {
     },
     deleteAllClick(){
       if(this.activeData.length === 0){
+        this.$message({
+          message:'请先选择至少一项',
+          type: 'error',
+          duration:'2000'
+        })
         return 
       }
       this.$refs.confirmBox.comfirm(`确定要删除选中的${this.activeData.length}行内容?`).then(async(resolve)=>{
@@ -186,9 +193,25 @@ export default {
       })
     },
     async activeClick(){
+      console.log(this.activeData.length)
+      if(this.activeData.length === 0){
+        this.$message({
+          message:'请先选择至少一项',
+          type: 'error',
+          duration:'2000'
+        })
+        return 
+      }
       try{
+        this.activeLoading = true
         let res = await activeOrigin(this.activeData)
-        this.$message.success('生效成功')
+
+        this.activeLoading = false
+        this.$message({
+          message:'生效成功',
+          type: 'success',
+          duration:'2000'
+        })
       }catch(err){
         throw err
       }

@@ -6,3 +6,11 @@ export const getAutoList=function(params){
     params
   }) 
 }
+
+export const createAutoList=function(params){
+  return axios({
+    method:'get',
+    url:'/createAutoList',
+    params
+  }) 
+}

@@ -178,6 +178,11 @@ export default {
     },
     deleteAllClick(){
       if(this.activeData.length === 0){
+        this.$message({
+          message:'请先选择至少一项',
+          type: 'error',
+          duration:'2000'
+        })
         return 
       }
       this.$refs.confirmBox.comfirm(`确定要删除选中的${this.activeData.length}行内容?`).then(async(resolve)=>{

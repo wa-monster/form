@@ -45,4 +45,37 @@ module.exports = function (app) {
       message:'添加成功'
     })
   })
+  app.post('/addMenuChildData',jsonParser, (req, res, next) => {
+    req.body.id=id;
+    id++;
+    let obj=req.body;
+    menuData.push(obj);
+    return res.json({
+      code: 0,
+      message:'添加成功'
+    })
+  })
+  app.post('/editMenuData',jsonParser, (req, res, next) => {
+    menuData.forEach((item)=>{
+      if(item.id==req.body.id){
+         for(let key in item){
+           item[key]=req.body[key]
+         }
+      }
+    })
+    return res.json({
+      code: 0,
+      message:'修改成功'
+    })
+  })
+
+  app.post('/delMenuData',jsonParser, (req, res, next) => {
+    menuData=menuData.filter((item)=>{
+      return item.id!==req.body.id;
+    })
+    return res.json({
+      code: 0,
+      message:'删除成功'
+    })
+  })
 }

@@ -15,6 +15,10 @@
         key="left"
         class="el-icon-arrow-left icon_top_menu icon_top_left"
       ></span>
+      <!-- <span
+        key="right"
+        class="el-icon-arrow-right icon_top_menu icon_top_right"
+      ></span> -->
     </div>
     <div
       class="top_mid"
@@ -164,19 +168,24 @@ export default {
   margin: -7px -7px;      
 }
 .icon_top_left{
-  transition: all .8s
   opacity: 0;
+  transition all .3s 
+  transform rotate(90deg)
 }
 .icon_top_close{
-  transition: all .8s
   opacity: 1;
+  transition all .3s
+  transform rotate(0)
 }
 .top_left:hover{
   .icon_top_left{
-    opacity: 1;
+    opacity 1
+    transform rotate(0)
   }
   .icon_top_close{
-    opacity: 0;
+    opacity 0
+    transform rotate(-90deg)
   }
 }
+
 </style>

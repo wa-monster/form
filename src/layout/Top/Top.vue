@@ -6,19 +6,19 @@
     <div
       class="top_left"
       @click="leftClick"
-      @mouseenter="handleEnter"
-      @mouseleave="handleEnter"
     >
-      <transition>
-        <span
-          v-if="lefeIcon"
-          class="el-icon-close"
-        ></span>
-        <span
-          v-else
-          class="el-icon-arrow-left"
-        ></span>
-      </transition>
+      <span
+        key="close"
+        class="el-icon-close icon_top_menu icon_top_close"
+      ></span>
+      <span
+        key="left"
+        class="el-icon-arrow-left icon_top_menu icon_top_left"
+      ></span>
+      <!-- <span
+        key="right"
+        class="el-icon-arrow-right icon_top_menu icon_top_right"
+      ></span> -->
     </div>
     <div
       class="top_mid"
@@ -29,6 +29,9 @@
       >
         <span class="el-icon-s-operation icon_menu"></span>
         <span class="text_menu">数据源设置</span>
+      </div>
+      <div @click="handleEnter">
+        动画
       </div>
     </div>
     <div
@@ -54,7 +57,7 @@
 export default {
   data(){
     return {
-      lefeIcon:true
+      lefeIcon:true,
     }
   },
   computed:{
@@ -98,6 +101,7 @@ export default {
     width:32px;
     line-height:40px;
     text-align:center;
+    position:relative;
   }
   .top_mid{
     width:calc(100% - 140px);
@@ -157,4 +161,31 @@ export default {
     }
   }
 }
+.icon_top_menu{
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin: -7px -7px;      
+}
+.icon_top_left{
+  opacity: 0;
+  transition all .3s 
+  transform rotate(90deg)
+}
+.icon_top_close{
+  opacity: 1;
+  transition all .3s
+  transform rotate(0)
+}
+.top_left:hover{
+  .icon_top_left{
+    opacity 1
+    transform rotate(0)
+  }
+  .icon_top_close{
+    opacity 0
+    transform rotate(-90deg)
+  }
+}
+
 </style>

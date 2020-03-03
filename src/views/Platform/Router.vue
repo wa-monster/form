@@ -133,7 +133,7 @@ export default {
     }
   },
   created() {
-    this.load();
+    this.onload();
   },
   mounted() {},
   methods: {

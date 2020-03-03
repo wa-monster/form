@@ -150,7 +150,7 @@ export default {
     }
   },
   created() {
-    this.onLoading();
+    this.onload();
   },
   methods: {
     async load() {
